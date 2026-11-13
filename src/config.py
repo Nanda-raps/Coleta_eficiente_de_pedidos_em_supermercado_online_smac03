@@ -23,3 +23,5 @@ GEOMETRIA = {
     "y_transversal_frente": 0.0,    # PREMISSA: transversal da frente (ENTRADA e CAIXA)
     "y_transversal_fundo": 20.0,    # PREMISSA: transversal do fundo
 }
+
+LIMITE_HELD_KARP = 15   # DOCUMENTO (3.2.2): ate 15 secoes distintas a rota otima e exata
