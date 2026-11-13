@@ -1,0 +1,135 @@
+aisle_id,aisle,department_id,department,corredor,posicao_na_frente
+24,fresh fruits,4,produce,1,1
+16,fresh herbs,4,produce,1,2
+45,candy chocolate,19,snacks,1,3
+23,popcorn jerky,19,snacks,1,4
+75,laundry,17,household,1,5
+47,vitamins supplements,11,personal care,1,6
+28,red wines,5,alcohol,1,7
+80,deodorants,11,personal care,1,8
+83,fresh vegetables,4,produce,2,1
+121,cereal,14,breakfast,2,2
+93,breakfast bakery,3,bakery,2,3
+130,hot cereal pancake mixes,14,breakfast,2,4
+42,frozen vegan vegetarian,1,frozen,2,5
+58,frozen breads doughs,1,frozen,2,6
+62,white wines,5,alcohol,2,7
+76,indian foods,6,international,2,8
+123,packaged vegetables fruits,4,produce,3,1
+53,cream,16,dairy eggs,3,2
+19,oils vinegars,13,pantry,3,3
+66,asian foods,6,international,3,4
+99,canned fruit applesauce,15,canned goods,3,5
+111,plates bowls cups flatware,17,household,3,6
+70,digestion,11,personal care,3,7
+73,facial care,11,personal care,3,8
+120,yogurt,16,dairy eggs,4,1
+98,juice nectars,7,beverages,4,2
+54,paper goods,17,household,4,3
+79,frozen pizza,1,frozen,4,4
+64,energy sports drinks,7,beverages,4,5
+127,body lotions soap,11,personal care,4,6
+124,spirits,5,alcohol,4,7
+33,kosher foods,6,international,4,8
+84,milk,16,dairy eggs,5,1
+108,other creams cheeses,16,dairy eggs,5,2
+32,packaged produce,4,produce,5,3
+63,grains rice dried goods,9,dry goods pasta,5,4
+2,specialty cheeses,16,dairy eggs,5,5
+6,other,2,other,5,6
+56,diapers wipes,18,babies,5,7
+103,ice cream toppings,19,snacks,5,8
+21,packaged cheese,16,dairy eggs,6,1
+3,energy granola bars,19,snacks,6,2
+9,pasta sauce,9,dry goods pasta,6,3
+35,poultry counter,12,meat seafood,6,4
+122,meat counter,12,meat seafood,6,5
+41,cat food care,8,pets,6,6
+11,cold flu allergy,11,personal care,6,7
+134,specialty wines champagnes,5,alcohol,6,8
+115,water seltzer sparkling water,7,beverages,7,1
+77,soft drinks,7,beverages,7,2
+52,frozen breakfast,1,frozen,7,3
+49,packaged poultry,12,meat seafood,7,4
+34,frozen meat seafood,1,frozen,7,5
+125,trail mix snack mix,19,snacks,7,6
+97,baking supplies decor,13,pantry,7,7
+118,first aid,11,personal care,7,8
+91,soy lactosefree,16,dairy eggs,8,1
+106,hot dogs bacon sausage,12,meat seafood,8,2
+72,condiments,13,pantry,8,3
+14,tofu meat alternatives,20,deli,8,4
+30,latino foods,6,international,8,5
+12,fresh pasta,9,dry goods pasta,8,6
+15,packaged seafood,12,meat seafood,8,7
+55,shave needs,11,personal care,8,8
+107,chips pretzels,19,snacks,9,1
+69,soup broth bouillon,15,canned goods,9,2
+61,cookies cakes,19,snacks,9,3
+43,buns rolls,3,bakery,9,4
+29,honeys syrups nectars,13,pantry,9,5
+7,packaged meat,12,meat seafood,9,6
+119,frozen dessert,1,frozen,9,7
+109,skin care,11,personal care,9,8
+112,bread,3,bakery,10,1
+117,nuts seeds dried fruit,19,snacks,10,2
+94,tea,7,beverages,10,3
+110,pickled goods olives,13,pantry,10,4
+1,prepared soups salads,20,deli,10,5
+8,bakery desserts,3,bakery,10,6
+46,mint gum,19,snacks,10,7
+10,kitchen supplies,17,household,10,8
+86,eggs,16,dairy eggs,11,1
+88,spreads,13,pantry,11,2
+128,tortillas flat bread,3,bakery,11,3
+51,preserved dips spreads,13,pantry,11,4
+95,canned meat seafood,15,canned goods,11,5
+65,protein meal replacements,11,personal care,11,6
+90,cocoa drink mixes,7,beverages,11,7
+44,eye ear care,11,personal care,11,8
+31,refrigerated,7,beverages,12,1
+17,baking ingredients,13,pantry,12,2
+26,coffee,7,beverages,12,3
+57,granola,14,breakfast,12,4
+100,missing,21,missing,12,5
+71,refrigerated pudding desserts,16,dairy eggs,12,6
+133,muscles joints pain relief,11,personal care,12,7
+82,baby accessories,18,babies,12,8
+116,frozen produce,1,frozen,13,1
+36,butter,16,dairy eggs,13,2
+104,spices seasonings,13,pantry,13,3
+105,doughs gelatins bake mixes,13,pantry,13,4
+48,breakfast bars pastries,14,breakfast,13,5
+60,trash bags liners,17,household,13,6
+18,bulk dried fruits vegetables,10,bulk,13,7
+102,baby bath body care,18,babies,13,8
+78,crackers,19,snacks,14,1
+38,frozen meals,1,frozen,14,2
+129,frozen appetizers sides,1,frozen,14,3
+114,cleaning products,17,household,14,4
+5,marinades meat preparation,13,pantry,14,5
+27,beers coolers,5,alcohol,14,6
+68,bulk grains rice dried goods,10,bulk,14,7
+132,beauty,11,personal care,14,8
+37,ice cream ice,1,frozen,15,1
+81,canned jarred vegetables,15,canned goods,15,2
+4,instant foods,9,dry goods pasta,15,3
+74,dish detergents,17,household,15,4
+85,food storage,17,household,15,5
+39,seafood counter,12,meat seafood,15,6
+126,feminine care,11,personal care,15,7
+113,frozen juice,1,frozen,15,8
+96,lunch meat,20,deli,16,1
+131,dry pasta,9,dry goods pasta,16,2
+92,baby food formula,18,babies,16,3
+13,prepared meals,20,deli,16,4
+20,oral hygiene,11,personal care,16,5
+40,dog food care,8,pets,16,6
+101,air fresheners candles,17,household,16,7
+67,fresh dips tapenades,20,deli,17,1
+59,canned meals beans,15,canned goods,17,2
+50,fruit vegetable snacks,19,snacks,17,3
+89,salad dressing toppings,13,pantry,17,4
+25,soap,11,personal care,17,5
+22,hair care,11,personal care,17,6
+87,more household,17,household,17,7

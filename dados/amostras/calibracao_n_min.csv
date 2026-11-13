@@ -1,0 +1,6 @@
+n_min,arestas_G2,componentes,secoes_isoladas,dist_media_validacao_m,diff_para_melhor_m,EP_bootstrap_m,dentro_de_1EP,dist_L0_validacao_m,reducao_vs_L0_pct
+30,8851,1,0,145.7885,1.006,0.569,False,157.234,7.28
+100,8582,1,0,148.7935,4.011,0.512,False,157.234,5.37
+300,7850,1,0,144.783,0.0,0.0,True,157.234,7.92
+1000,6179,1,0,145.468,0.685,0.551,False,157.234,7.48
+3215,4051,4,3,146.49,1.707,0.572,False,157.234,6.83

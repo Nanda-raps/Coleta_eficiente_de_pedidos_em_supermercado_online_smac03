@@ -1,0 +1,101 @@
+﻿id_teste,order_id,itens no pedido,seções distintas,departamentos distintos,seções do pedido,departamentos do pedido
+1,21461,12,3,1,fresh fruits; fresh vegetables; packaged vegetables fruits,produce
+2,40098,8,7,4,packaged cheese; refrigerated; candy chocolate; soft drinks; juice nectars; chips pretzels; frozen appetizers sides,beverages; dairy eggs; frozen; snacks
+3,44675,28,16,8,instant foods; pasta sauce; packaged cheese; fresh fruits; kosher foods; ice cream ice; cream; paper goods; fresh vegetables; soy lactosefree; other creams cheeses; bread; frozen produce; yogurt; cereal; packaged vegetables fruits,bakery; breakfast; dairy eggs; dry goods pasta; frozen; household; international; produce
+4,66497,18,10,8,packaged cheese; beers coolers; refrigerated; asian foods; frozen pizza; fresh vegetables; chips pretzels; bread; water seltzer sparkling water; packaged vegetables fruits,alcohol; bakery; beverages; dairy eggs; frozen; international; produce; snacks
+5,116525,6,5,3,cream; soft drinks; spices seasonings; water seltzer sparkling water; yogurt,beverages; dairy eggs; pantry
+6,155647,3,3,2,instant foods; canned jarred vegetables; canned fruit applesauce,canned goods; dry goods pasta
+7,188233,3,3,2,fresh herbs; fresh vegetables; milk,dairy eggs; produce
+8,238586,10,6,6,baking ingredients; fresh vegetables; milk; cereal; feminine care; tortillas flat bread,bakery; breakfast; dairy eggs; pantry; personal care; produce
+9,278336,1,1,1,bakery desserts,bakery
+10,279968,3,3,3,fresh fruits; candy chocolate; soft drinks,beverages; produce; snacks
+11,281286,8,6,4,packaged cheese; fresh fruits; frozen meals; frozen breads doughs; water seltzer sparkling water; frozen produce,beverages; dairy eggs; frozen; produce
+12,291122,22,13,8,specialty cheeses; tofu meat alternatives; packaged cheese; popcorn jerky; fresh fruits; honeys syrups nectars; grains rice dried goods; fresh vegetables; milk; water seltzer sparkling water; nuts seeds dried fruit; cereal; packaged vegetables fruits,beverages; breakfast; dairy eggs; deli; dry goods pasta; pantry; produce; snacks
+13,303287,21,18,12,tofu meat alternatives; fresh herbs; oils vinegars; fresh fruits; butter; seafood counter; grains rice dried goods; asian foods; soup broth bouillon; crackers; baby accessories; fresh vegetables; milk; soy lactosefree; tea; hot dogs bacon sausage; skin care; nuts seeds dried fruit,babies; beverages; canned goods; dairy eggs; deli; dry goods pasta; international; meat seafood; pantry; personal care; produce; snacks
+14,343802,16,14,9,ice cream ice; cream; granola; canned meals beans; soup broth bouillon; laundry; soft drinks; eggs; soy lactosefree; missing; hot dogs bacon sausage; yogurt; packaged vegetables fruits; frozen appetizers sides,beverages; breakfast; canned goods; dairy eggs; frozen; household; meat seafood; missing; produce
+15,344517,11,9,7,baking ingredients; frozen meals; grains rice dried goods; fresh vegetables; eggs; spreads; soy lactosefree; tea; chips pretzels,beverages; dairy eggs; dry goods pasta; frozen; pantry; produce; snacks
+16,344544,1,1,1,fresh fruits,produce
+17,414116,7,4,3,baking ingredients; packaged cheese; fresh fruits; fresh vegetables,dairy eggs; pantry; produce
+18,425895,18,13,6,fresh fruits; frozen meals; buns rolls; condiments; frozen pizza; fresh vegetables; salad dressing toppings; soy lactosefree; breakfast bakery; juice nectars; water seltzer sparkling water; packaged vegetables fruits; frozen appetizers sides,bakery; beverages; dairy eggs; frozen; pantry; produce
+19,500131,11,8,7,fresh fruits; laundry; deodorants; milk; salad dressing toppings; tea; juice nectars; cereal,beverages; breakfast; dairy eggs; household; pantry; personal care; produce
+20,530358,10,6,4,fresh fruits; buns rolls; fresh dips tapenades; canned jarred vegetables; fresh vegetables; lunch meat,bakery; canned goods; deli; produce
+21,532393,10,8,6,fresh fruits; ice cream ice; fruit vegetable snacks; cream; chips pretzels; bread; water seltzer sparkling water; packaged vegetables fruits,bakery; beverages; dairy eggs; frozen; produce; snacks
+22,539912,1,1,1,oils vinegars,pantry
+23,576171,3,3,3,fresh fruits; coffee; yogurt,beverages; dairy eggs; produce
+24,577164,3,2,2,packaged produce; packaged poultry,meat seafood; produce
+25,587806,5,3,3,fresh vegetables; hot dogs bacon sausage; plates bowls cups flatware,household; meat seafood; produce
+26,612324,7,6,4,packaged cheese; fresh fruits; coffee; packaged produce; canned jarred vegetables; packaged vegetables fruits,beverages; canned goods; dairy eggs; produce
+27,643062,19,13,8,fresh herbs; fresh fruits; butter; fresh dips tapenades; canned jarred vegetables; fresh vegetables; milk; eggs; salad dressing toppings; lunch meat; bread; nuts seeds dried fruit; cereal,bakery; breakfast; canned goods; dairy eggs; deli; pantry; produce; snacks
+28,672927,9,6,6,specialty cheeses; packaged produce; frozen meals; canned meat seafood; lunch meat; bread,bakery; canned goods; dairy eggs; deli; frozen; produce
+29,688792,1,1,1,packaged cheese,dairy eggs
+30,730081,7,7,6,baking ingredients; fresh fruits; dish detergents; juice nectars; chips pretzels; cereal; hot cereal pancake mixes,beverages; breakfast; household; pantry; produce; snacks
+31,789475,13,9,4,oils vinegars; refrigerated; fresh vegetables; milk; tea; pickled goods olives; water seltzer sparkling water; yogurt; packaged vegetables fruits,beverages; dairy eggs; pantry; produce
+32,824458,19,17,9,instant foods; fresh fruits; frozen breakfast; condiments; frozen pizza; milk; spreads; soy lactosefree; baby food formula; breakfast bakery; doughs gelatins bake mixes; chips pretzels; other creams cheeses; bread; yogurt; cereal; hot cereal pancake mixes,babies; bakery; breakfast; dairy eggs; dry goods pasta; frozen; pantry; produce; snacks
+33,869800,1,1,1,soup broth bouillon,canned goods
+34,912982,17,11,7,packaged cheese; fresh fruits; granola; canned meals beans; crackers; fresh vegetables; eggs; frozen produce; yogurt; packaged vegetables fruits; tortillas flat bread,bakery; breakfast; canned goods; dairy eggs; frozen; produce; snacks
+35,969517,7,5,3,baking ingredients; refrigerated; cream; soft drinks; juice nectars,beverages; dairy eggs; pantry
+36,982627,1,1,1,energy sports drinks,beverages
+37,1188672,2,2,1,coffee; water seltzer sparkling water,beverages
+38,1200760,14,12,6,fresh fruits; cookies cakes; energy sports drinks; condiments; crackers; milk; spreads; chips pretzels; bread; water seltzer sparkling water; yogurt; packaged vegetables fruits,bakery; beverages; dairy eggs; pantry; produce; snacks
+39,1213002,1,1,1,soup broth bouillon,canned goods
+40,1305502,8,6,5,refrigerated; soup broth bouillon; fresh vegetables; eggs; packaged vegetables fruits; dry pasta,beverages; canned goods; dairy eggs; dry goods pasta; produce
+41,1475243,10,10,5,instant foods; packaged cheese; fresh fruits; packaged produce; ice cream ice; frozen meals; cream; fresh vegetables; missing; packaged vegetables fruits,dairy eggs; dry goods pasta; frozen; missing; produce
+42,1484187,2,2,2,fresh herbs; paper goods,household; produce
+43,1514564,10,8,7,prepared soups salads; instant foods; packaged cheese; granola; fresh vegetables; salad dressing toppings; missing; yogurt,breakfast; dairy eggs; deli; dry goods pasta; missing; pantry; produce
+44,1555799,1,1,1,packaged cheese,dairy eggs
+45,1587939,8,6,3,marinades meat preparation; oils vinegars; beers coolers; bread; spirits; tortillas flat bread,alcohol; bakery; pantry
+46,1591463,16,11,7,baking ingredients; hair care; fresh fruits; fresh vegetables; eggs; tea; canned fruit applesauce; spices seasonings; bread; yogurt; packaged vegetables fruits,bakery; beverages; canned goods; dairy eggs; pantry; personal care; produce
+47,1640008,20,17,10,packaged cheese; fresh fruits; frozen meals; paper goods; dish detergents; fresh vegetables; eggs; salad dressing toppings; soy lactosefree; tea; lunch meat; chips pretzels; other creams cheeses; bread; cereal; packaged vegetables fruits; tortillas flat bread,bakery; beverages; breakfast; dairy eggs; deli; frozen; household; pantry; produce; snacks
+48,1665977,5,4,3,prepared meals; soft drinks; juice nectars; chips pretzels,beverages; deli; snacks
+49,1725440,5,5,5,fresh fruits; frozen meat seafood; eggs; hot dogs bacon sausage; bread,bakery; dairy eggs; frozen; meat seafood; produce
+50,1733861,27,7,4,fresh fruits; coffee; refrigerated; cream; cocoa drink mixes; missing; water seltzer sparkling water,beverages; dairy eggs; missing; produce
+51,1754369,6,6,4,fresh fruits; fresh vegetables; milk; spices seasonings; cereal; packaged vegetables fruits,breakfast; dairy eggs; pantry; produce
+52,1876996,24,15,8,pasta sauce; fresh fruits; refrigerated; frozen meals; buns rolls; frozen breakfast; soft drinks; fresh vegetables; spreads; breakfast bakery; chips pretzels; water seltzer sparkling water; yogurt; packaged vegetables fruits; frozen appetizers sides,bakery; beverages; dairy eggs; dry goods pasta; frozen; pantry; produce; snacks
+53,1947128,9,5,4,fresh fruits; packaged poultry; fresh vegetables; food storage; yogurt,dairy eggs; household; meat seafood; produce
+54,1996808,14,8,5,tofu meat alternatives; fresh herbs; fresh fruits; canned jarred vegetables; fresh vegetables; nuts seeds dried fruit; packaged vegetables fruits; tortillas flat bread,bakery; canned goods; deli; produce; snacks
+55,2018535,9,9,7,fresh fruits; vitamins supplements; indian foods; milk; soy lactosefree; lunch meat; water seltzer sparkling water; nuts seeds dried fruit; packaged vegetables fruits,beverages; dairy eggs; deli; international; personal care; produce; snacks
+56,2094325,24,11,6,tofu meat alternatives; fresh herbs; oils vinegars; fresh fruits; canned meals beans; grains rice dried goods; soup broth bouillon; fresh vegetables; air fresheners candles; cleaning products; packaged vegetables fruits,canned goods; deli; dry goods pasta; household; pantry; produce
+57,2101721,11,9,7,fresh fruits; butter; frozen meals; frozen breakfast; fresh dips tapenades; canned fruit applesauce; missing; other creams cheeses; water seltzer sparkling water,beverages; canned goods; dairy eggs; deli; frozen; missing; produce
+58,2127903,9,6,6,instant foods; ice cream ice; asian foods; fresh vegetables; juice nectars; chips pretzels,beverages; dry goods pasta; frozen; international; produce; snacks
+59,2137083,8,7,5,popcorn jerky; refrigerated; ice cream ice; fresh dips tapenades; tea; chips pretzels; yogurt,beverages; dairy eggs; deli; frozen; snacks
+60,2205823,1,1,1,body lotions soap,personal care
+61,2239245,7,4,2,fresh fruits; packaged produce; cream; packaged vegetables fruits,dairy eggs; produce
+62,2270693,16,15,9,instant foods; tofu meat alternatives; baking ingredients; fresh fruits; packaged poultry; fresh dips tapenades; soup broth bouillon; condiments; fresh vegetables; soy lactosefree; chips pretzels; nuts seeds dried fruit; packaged vegetables fruits; hot cereal pancake mixes; dry pasta,breakfast; canned goods; dairy eggs; deli; dry goods pasta; meat seafood; pantry; produce; snacks
+63,2276752,21,15,7,packaged cheese; fresh fruits; butter; breakfast bars pastries; frozen breakfast; crackers; frozen pizza; milk; chips pretzels; bread; water seltzer sparkling water; frozen produce; yogurt; cereal; packaged vegetables fruits,bakery; beverages; breakfast; dairy eggs; frozen; produce; snacks
+64,2343952,14,9,6,fresh fruits; poultry counter; butter; ice cream ice; asian foods; fresh vegetables; juice nectars; hot dogs bacon sausage; packaged vegetables fruits,beverages; dairy eggs; frozen; international; meat seafood; produce
+65,2397153,5,4,3,coffee; refrigerated; buns rolls; fresh vegetables,bakery; beverages; produce
+66,2405541,4,4,4,frozen meat seafood; paper goods; milk; cereal,breakfast; dairy eggs; frozen; household
+67,2429854,6,5,4,packaged produce; candy chocolate; soft drinks; milk; packaged vegetables fruits,beverages; dairy eggs; produce; snacks
+68,2533182,11,7,5,fresh fruits; poultry counter; ice cream ice; candy chocolate; fresh vegetables; eggs; packaged vegetables fruits,dairy eggs; frozen; meat seafood; produce; snacks
+69,2599130,3,3,3,bakery desserts; facial care; soy lactosefree,bakery; dairy eggs; personal care
+70,2619369,4,3,3,ice cream ice; more household; meat counter,frozen; household; meat seafood
+71,2650079,17,10,5,specialty cheeses; fresh herbs; oils vinegars; packaged cheese; fresh vegetables; salad dressing toppings; spices seasonings; water seltzer sparkling water; nuts seeds dried fruit; yogurt,beverages; dairy eggs; pantry; produce; snacks
+72,2659272,27,23,11,packaged cheese; latino foods; butter; ice cream ice; frozen meals; cream; paper goods; frozen breads doughs; canned meals beans; soup broth bouillon; canned jarred vegetables; milk; spreads; canned meat seafood; lunch meat; doughs gelatins bake mixes; hot dogs bacon sausage; chips pretzels; other creams cheeses; frozen produce; frozen appetizers sides; hot cereal pancake mixes; dry pasta,breakfast; canned goods; dairy eggs; deli; dry goods pasta; frozen; household; international; meat seafood; pantry; snacks
+73,2660972,28,21,11,fresh fruits; poultry counter; butter; ice cream ice; frozen meals; candy chocolate; packaged poultry; paper goods; laundry; soft drinks; crackers; fresh vegetables; milk; spreads; baby food formula; breakfast bakery; other creams cheeses; cleaning products; water seltzer sparkling water; frozen produce; dry pasta,babies; bakery; beverages; dairy eggs; dry goods pasta; frozen; household; meat seafood; pantry; produce; snacks
+74,2722427,29,19,9,instant foods; baking ingredients; packaged cheese; fresh fruits; refrigerated; packaged produce; butter; frozen meals; canned meals beans; soup broth bouillon; condiments; crackers; canned jarred vegetables; fresh vegetables; milk; breakfast bakery; spices seasonings; water seltzer sparkling water; packaged vegetables fruits,bakery; beverages; canned goods; dairy eggs; dry goods pasta; frozen; pantry; produce; snacks
+75,2739002,17,12,6,oral hygiene; fresh fruits; cream; digestion; fresh vegetables; eggs; soy lactosefree; hot dogs bacon sausage; frozen produce; nuts seeds dried fruit; yogurt; packaged vegetables fruits,dairy eggs; frozen; meat seafood; personal care; produce; snacks
+76,2791873,18,11,7,bakery desserts; prepared meals; packaged cheese; fresh fruits; frozen meals; soup broth bouillon; milk; lunch meat; juice nectars; yogurt; packaged vegetables fruits,bakery; beverages; canned goods; dairy eggs; deli; frozen; produce
+77,2810951,24,14,7,packaged cheese; fresh fruits; fresh vegetables; milk; eggs; salad dressing toppings; soy lactosefree; baby food formula; chips pretzels; pickled goods olives; bread; cereal; packaged vegetables fruits; hot cereal pancake mixes,babies; bakery; breakfast; dairy eggs; pantry; produce; snacks
+78,2821488,4,4,3,refrigerated; milk; juice nectars; bread,bakery; beverages; dairy eggs
+79,2850883,15,10,6,marinades meat preparation; fresh herbs; baking ingredients; fresh fruits; poultry counter; candy chocolate; fresh vegetables; lunch meat; frozen produce; packaged vegetables fruits,deli; frozen; meat seafood; pantry; produce; snacks
+80,2868044,18,13,8,energy granola bars; fresh fruits; coffee; breakfast bars pastries; soft drinks; milk; soy lactosefree; breakfast bakery; tea; missing; other creams cheeses; bread; frozen produce,bakery; beverages; breakfast; dairy eggs; frozen; missing; produce; snacks
+81,2881406,11,7,4,frozen meals; soft drinks; eggs; spreads; soy lactosefree; other creams cheeses; yogurt,beverages; dairy eggs; frozen; pantry
+82,2894727,12,6,4,tofu meat alternatives; fresh herbs; fresh fruits; butter; fresh vegetables; dry pasta,dairy eggs; deli; dry goods pasta; produce
+83,2943674,5,5,4,ice cream ice; buns rolls; hot dogs bacon sausage; nuts seeds dried fruit; frozen appetizers sides,bakery; frozen; meat seafood; snacks
+84,2963483,19,9,5,fresh fruits; soup broth bouillon; condiments; canned jarred vegetables; fresh vegetables; soy lactosefree; spices seasonings; frozen produce; packaged vegetables fruits,canned goods; dairy eggs; frozen; pantry; produce
+85,2978116,2,2,2,refrigerated; frozen appetizers sides,beverages; frozen
+86,2992748,5,3,3,fresh fruits; crackers; water seltzer sparkling water,beverages; produce; snacks
+87,3027958,23,8,6,energy granola bars; fresh fruits; soap; fresh vegetables; lunch meat; yogurt; packaged vegetables fruits; frozen appetizers sides,dairy eggs; deli; frozen; personal care; produce; snacks
+88,3112269,3,2,1,fresh fruits; packaged produce,produce
+89,3129144,9,7,6,specialty cheeses; pasta sauce; fresh fruits; canned meals beans; fresh vegetables; water seltzer sparkling water; meat counter,beverages; canned goods; dairy eggs; dry goods pasta; meat seafood; produce
+90,3169014,16,11,7,fresh pasta; packaged cheese; hair care; butter; ice cream ice; frozen meals; packaged poultry; crackers; fresh vegetables; body lotions soap; dry pasta,dairy eggs; dry goods pasta; frozen; meat seafood; personal care; produce; snacks
+91,3175113,25,16,9,energy granola bars; instant foods; pasta sauce; fresh fruits; ice cream ice; frozen breakfast; cream; fresh dips tapenades; fresh vegetables; soy lactosefree; juice nectars; chips pretzels; meat counter; packaged vegetables fruits; hot cereal pancake mixes; dry pasta,beverages; breakfast; dairy eggs; deli; dry goods pasta; frozen; meat seafood; produce; snacks
+92,3198411,13,13,7,instant foods; fresh fruits; honeys syrups nectars; butter; frozen meals; frozen breakfast; cream; fresh vegetables; milk; eggs; baby food formula; chips pretzels; yogurt,babies; dairy eggs; dry goods pasta; frozen; pantry; produce; snacks
+93,3227036,9,8,4,prepared meals; fresh fruits; refrigerated; soft drinks; fresh vegetables; milk; yogurt; packaged vegetables fruits,beverages; dairy eggs; deli; produce
+94,3236131,12,8,4,popcorn jerky; fresh fruits; fresh dips tapenades; fresh vegetables; milk; chips pretzels; yogurt; packaged vegetables fruits,dairy eggs; deli; produce; snacks
+95,3241775,7,7,4,energy granola bars; packaged cheese; ice cream ice; cookies cakes; soft drinks; frozen pizza; tea,beverages; dairy eggs; frozen; snacks
+96,3317375,11,9,5,energy granola bars; popcorn jerky; cookies cakes; grains rice dried goods; crackers; chips pretzels; plates bowls cups flatware; water seltzer sparkling water; packaged vegetables fruits,beverages; dry goods pasta; household; produce; snacks
+97,3333851,6,3,3,mint gum; paper goods; water seltzer sparkling water,beverages; household; snacks
+98,3351108,7,6,4,baking ingredients; packaged cheese; butter; crackers; fresh vegetables; nuts seeds dried fruit,dairy eggs; pantry; produce; snacks
+99,3371845,5,4,4,fresh dips tapenades; spreads; bread; hot cereal pancake mixes,bakery; breakfast; deli; pantry
+100,3403205,7,5,3,fresh herbs; fresh fruits; canned jarred vegetables; bread; packaged vegetables fruits,bakery; canned goods; produce
