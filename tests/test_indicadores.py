@@ -5,11 +5,13 @@ Precisa de dados/curados/dados_integrados_train.csv (gerado pelo notebook de cur
 import sys
 from pathlib import Path
 
+import numpy as np
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 from carga import carregar_pedidos_avaliacao, slots_do_pedido                                   # noqa: E402
 from grafo_fisico import grafo_padrao, carregar_layout                                          # noqa: E402
-from indicadores import (contar_equivalentes, ganho, n_corredores, pares_equivalentes,          # noqa: E402
-                         pedidos_por_turno, tempo_coleta)
+from indicadores import (bootstrap_ic, contar_equivalentes, ganho, ganho_medio, n_corredores,   # noqa: E402
+                         pares_equivalentes, pedidos_por_turno, reducao_media, resumo, tempo_coleta)
 from rotas import ESTRATEGIAS, executar                                                        # noqa: E402
 
 g = grafo_padrao()
@@ -115,6 +117,89 @@ def test_tempo_nao_muda_a_ordem_das_estrategias():
         por_distancia = sorted(ESTRATEGIAS, key=lambda e: c[e])
         por_tempo = sorted(ESTRATEGIAS, key=lambda e: tempo_coleta(c[e], r.n_itens))
         assert [c[e] for e in por_distancia] == [c[e] for e in por_tempo]
+
+
+# ---- resumo, reducao e ganho medio (a mao) ---------------------------------------------
+def test_resumo_a_mao():
+    r = resumo([1, 2, 3, 10])
+    assert perto(r["media"], 4.0) and perto(r["mediana"], 2.5)
+
+
+def test_reducao_media_a_mao():
+    assert perto(reducao_media([100, 200], [90, 180]), 0.10)             # medias 150 e 135
+    # razao das medias (1 - 125/150 = 0,1667), e NAO a media das reducoes por pedido ((0,5 + 0)/2 = 0,25)
+    assert perto(reducao_media([100, 200], [50, 200]), 1 - 125 / 150)
+    assert perto(reducao_media([100, 200], [100, 200]), 0.0)
+
+
+def test_reducao_media_reproduz_a_calibracao():
+    assert abs(100 * reducao_media([157.234], [144.783]) - 7.92) < 0.005   # calibracao_n_min.csv, n_min = 300
+
+
+def test_ganho_medio_a_mao():
+    assert perto(ganho_medio([100, 200], [80, 100]), 0.35)               # ganhos 0,2 e 0,5
+
+
+# ---- bootstrap pareado ---------------------------------------------------------------------
+def test_bootstrap_reproduzivel():
+    v = np.arange(100.0)
+    assert bootstrap_ic(np.mean, v) == bootstrap_ic(np.mean, v)          # mesma semente, mesmo resultado
+    assert bootstrap_ic(np.mean, v, semente=1) != bootstrap_ic(np.mean, v, semente=2)
+
+
+def test_bootstrap_intervalo_contem_a_estimativa():
+    est, inf, sup = bootstrap_ic(np.mean, np.arange(100.0))
+    assert perto(est, 49.5) and inf < est < sup
+    # largura esperada, pela aproximacao normal: 2 * 1,96 * desvio / raiz(n) = 2 * 1,96 * 28,87 / 10 = 11,3
+    assert 9.0 < sup - inf < 13.5, sup - inf
+
+
+def test_bootstrap_dados_constantes():
+    assert bootstrap_ic(np.mean, [5.0] * 50) == (5.0, 5.0, 5.0)          # sem variacao, intervalo de largura zero
+    assert bootstrap_ic(np.mean, [7.0]) == (7.0, 7.0, 7.0)               # um unico pedido
+
+
+def test_bootstrap_mantem_o_pareamento():
+    # b = 2 * a em todo pedido. Se o sorteio fosse independente por serie, b - 2a deixaria de ser 0.
+    a = np.arange(100.0)
+    est, inf, sup = bootstrap_ic(lambda x, y: float(np.mean(y - 2 * x)), a, 2 * a)
+    assert (est, inf, sup) == (0.0, 0.0, 0.0)
+
+
+def test_bootstrap_pareado_estreita_a_diferenca():
+    d0 = np.random.default_rng(0).uniform(100, 200, 100)                 # distancias por pedido
+    d1 = d0 - 10                                                         # sempre 10 m a menos, pedido a pedido
+    est, inf, sup = bootstrap_ic(lambda a, b: float(np.mean(a - b)), d0, d1)
+    assert perto(est, 10.0) and sup - inf < 1e-9                         # pareado: diferenca exata, sem incerteza
+    _, inf0, sup0 = bootstrap_ic(np.mean, d0)                            # mas cada media sozinha e incerta
+    assert sup0 - inf0 > 5.0
+
+
+def test_bootstrap_erros():
+    for chamada in (lambda: bootstrap_ic(np.mean),                       # sem series
+                    lambda: bootstrap_ic(np.mean, []),                   # serie vazia
+                    lambda: bootstrap_ic(reducao_media, [1, 2], [1]),    # tamanhos diferentes
+                    lambda: bootstrap_ic(np.mean, [1, 2], nivel=1.5)):   # nivel invalido
+        try:
+            chamada()
+        except ValueError:
+            continue
+        raise AssertionError("era esperado ValueError")
+
+
+def test_bootstrap_nos_pedidos_reais():
+    # Distancias de sigma_opt nos 100 pedidos, em L0 e L1, e a reducao de L1 contra L0.
+    # Valores de referencia obtidos com o codigo na Etapa 3 (teste de regressao).
+    d = {}
+    for nome in ("L0", "L1"):
+        _, mapa = carregar_layout(nome)
+        d[nome] = [custos_do_pedido(r.secoes, mapa)["opt"] for r in pedidos.itertuples()]
+    est, inf, sup = bootstrap_ic(reducao_media, d["L0"], d["L1"])
+    assert perto(est, 1 - np.mean(d["L1"]) / np.mean(d["L0"]))           # estimativa = conta direta
+    assert inf < est < sup
+    assert 0.070 < est < 0.077, est                                      # cerca de 7,3%
+    media_l0, _, _ = bootstrap_ic(np.mean, d["L0"])
+    assert perto(media_l0, resumo(d["L0"])["media"])
 
 
 for nome, f in list(globals().items()):

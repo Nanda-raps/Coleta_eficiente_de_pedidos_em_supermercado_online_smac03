@@ -33,3 +33,10 @@ TEMPO = {
     "t_fixo": 120.0,        # DOCUMENTO (3.5): segundos fixos por pedido
     "turno": 28800.0,       # DOCUMENTO (3.5): H, 8 horas em segundos
 }
+
+# Bootstrap pareado (usado em indicadores.py)
+SEMENTE = 42                # semente fixa de todos os sorteios (plano de divisao: "sementes fixas (42)")
+BOOTSTRAP = {
+    "repeticoes": 10000,    # PREMISSA: quantas vezes os pedidos sao re-sorteados
+    "nivel": 0.95,          # PREMISSA: intervalo de confianca de 95%
+}
