@@ -25,3 +25,11 @@ GEOMETRIA = {
 }
 
 LIMITE_HELD_KARP = 15   # DOCUMENTO (3.2.2): ate 15 secoes distintas a rota otima e exata
+
+# Tempo de coleta (usado em indicadores.py): T(o) = D/v + t_item * |o| + t_fixo
+TEMPO = {
+    "velocidade": 1.0,      # DOCUMENTO (3.5): v, em m/s
+    "t_item": 15.0,         # DOCUMENTO (3.5): segundos por item
+    "t_fixo": 120.0,        # DOCUMENTO (3.5): segundos fixos por pedido
+    "turno": 28800.0,       # DOCUMENTO (3.5): H, 8 horas em segundos
+}
