@@ -46,7 +46,7 @@ class GrafoFisico:
         """Indice do slot (corredor, posicao) em D."""
         return self._indice[(corredor, posicao)]
 
-    # ---- construcao do grafo -------------------------------------------------
+    # Construcao do grafo
     def _novo_no(self, x, y):
         self._coord.append((x, y))
         self._adj.append([])
@@ -54,7 +54,7 @@ class GrafoFisico:
 
     def _aresta(self, u, v):
         (xu, yu), (xv, yv) = self._coord[u], self._coord[v]
-        peso = abs(xu - xv) + abs(yu - yv)                # distancia de Manhattan
+        peso = abs(xu - xv) + abs(yu - yv)
         self._adj[u].append((v, peso))
         self._adj[v].append((u, peso))
 
@@ -95,7 +95,7 @@ class GrafoFisico:
         self._aresta(ent, passagem_frente[corredores[0]])
         self._aresta(cax, passagem_frente[corredores[-1]])
 
-    # ---- caminhos minimos ----------------------------------------------------
+    # Caminhos minimos
     def dijkstra(self, origem):
         """Distancia minima de `origem` a todos os nos do grafo."""
         dist = [float("inf")] * len(self._adj)

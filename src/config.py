@@ -6,6 +6,7 @@ pelos modeladores; se mudarem, basta ajustar aqui, o resto do codigo le deste ar
 """
 from pathlib import Path
 
+# Caminhos
 RAIZ = Path(__file__).resolve().parent.parent          # raiz do repositorio
 LAYOUTS = {
     "L0": RAIZ / "dados" / "layouts" / "layout_L0.csv",
@@ -14,16 +15,20 @@ LAYOUTS = {
 }
 PASTA_RESULTADOS = RAIZ / "resultados"
 
+# Geometria da loja (metros)
+COMPRIMENTO_CORREDOR = 20.0     # DOCUMENTO: 20 m por corredor
+SLOTS_POR_CORREDOR = 8          # DOCUMENTO: 8 secoes em 15 corredores (2 corredores tem 7)
+
 GEOMETRIA = {
-    "comprimento_corredor": 20.0,   # DOCUMENTO: 20 m por corredor
-    "espaco_eixos": 4.0,            # DOCUMENTO: 4 m entre eixos de corredores adjacentes
-    "espaco_slots": 2.5,            # PREMISSA: 20 m / 8 slots
-    "y_primeiro_slot": 1.25,        # PREMISSA: centro do 1o slot (2,5 m / 2)
-    "h_lateral": 0.0,               # PREMISSA calibrada: h_i = 0 reproduz calibracao_n_min.csv
-    "y_transversal_frente": 0.0,    # PREMISSA: transversal da frente (ENTRADA e CAIXA)
-    "y_transversal_fundo": 20.0,    # PREMISSA: transversal do fundo
+    "espaco_eixos": 4.0,                                         # DOCUMENTO: 4 m entre eixos de corredores adjacentes
+    "espaco_slots": COMPRIMENTO_CORREDOR / SLOTS_POR_CORREDOR,   # PREMISSA: 20 m / 8 slots = 2,5 m
+    "y_primeiro_slot": COMPRIMENTO_CORREDOR / SLOTS_POR_CORREDOR / 2,  # PREMISSA: centro do 1o slot = 1,25 m
+    "h_lateral": 0.0,                                            # PREMISSA calibrada: h_i = 0 reproduz calibracao_n_min.csv
+    "y_transversal_frente": 0.0,                                 # PREMISSA: transversal da frente (ENTRADA e CAIXA)
+    "y_transversal_fundo": COMPRIMENTO_CORREDOR,                 # PREMISSA: transversal do fundo, no fim do corredor
 }
 
+# Rotas
 LIMITE_HELD_KARP = 15   # DOCUMENTO (3.2.2): ate 15 secoes distintas a rota otima e exata
 
 # Tempo de coleta (usado em indicadores.py): T(o) = D/v + t_item * |o| + t_fixo

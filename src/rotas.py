@@ -68,7 +68,7 @@ def dois_opt(ordem, D, g):
                 antes = D[rota[i - 1], rota[i]] + D[rota[j], rota[j + 1]]
                 depois = D[rota[i - 1], rota[j]] + D[rota[i], rota[j + 1]]
                 if depois < antes - 1e-9:
-                    rota[i:j + 1] = reversed(rota[i:j + 1])   # inverte o trecho i..j
+                    rota[i:j + 1] = reversed(rota[i:j + 1])
                     melhorou = True
     return rota[1:-1]
 
