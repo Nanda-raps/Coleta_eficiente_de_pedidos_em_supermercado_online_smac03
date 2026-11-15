@@ -1,6 +1,6 @@
 """Testes da carga dos pedidos. Rodar na raiz do repositorio: python tests/test_carga.py
 
-Precisa de dados/curados/dados_integrados_train.csv (gerado pelo notebook de curadoria).
+Usa so arquivos do repositorio (dados/amostras e dados/curados).
 """
 import sys
 from pathlib import Path
@@ -51,7 +51,7 @@ def test_ordem_do_carrinho_difere_da_listada():
 
 
 def test_pedido_conferido_a_mao():
-    # Conferido nas linhas de dados_integrados_train.csv, ordenadas por add_to_cart_order:
+    # Conferido nas linhas de pedidos_avaliacao_carrinho.csv, ordenadas por add_to_cart_order:
     # pedido 40098: 129, 77, 45, 21, 107, 31, 77 (repetida: ignorar), 98
     por_pedido = pedidos.set_index("order_id")
     assert por_pedido.loc[40098, "secoes"] == [129, 77, 45, 21, 107, 31, 98]

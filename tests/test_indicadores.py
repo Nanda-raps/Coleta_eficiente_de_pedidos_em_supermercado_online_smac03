@@ -1,6 +1,6 @@
 """Testes dos indicadores. Rodar na raiz do repositorio: python tests/test_indicadores.py
 
-Precisa de dados/curados/dados_integrados_train.csv (gerado pelo notebook de curadoria).
+Usa so arquivos do repositorio (dados/amostras e dados/curados).
 """
 import sys
 from pathlib import Path

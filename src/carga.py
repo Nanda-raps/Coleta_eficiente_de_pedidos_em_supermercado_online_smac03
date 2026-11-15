@@ -3,10 +3,11 @@
 O Pedidos.csv traz, para cada um dos 100 pedidos, os NOMES das secoes, numa ordem que
 NAO e a do carrinho (em 82 dos 100 pedidos a ordem difere). Para a estrategia sigma_ref
 precisamos da ordem em que o cliente colocou os itens no carrinho. Ela vem de
-dados_integrados_train.csv (gerado pelo notebook de curadoria), coluna add_to_cart_order.
+dados/amostras/pedidos_avaliacao_carrinho.csv (itens dos 100 pedidos, extraidos de
+dados_integrados_train.csv), coluna add_to_cart_order.
 
 Caminho dos dados ate a rota:
-    nome da secao --(aisles.csv)--> aisle_id
+    nome da secao --(catalogo_aisles_departamentos.csv)--> aisle_id
     aisle_id, na ordem do carrinho --(layout)--> (corredor, posicao) --> indice do slot em D
 
 Uso:
@@ -19,12 +20,12 @@ import pandas as pd
 from config import RAIZ
 
 PEDIDOS_CSV = RAIZ / "dados" / "amostras" / "Pedidos.csv"
-AISLES_CSV = RAIZ / "dados" / "instacart" / "aisles.csv"
-INTEGRADOS_CSV = RAIZ / "dados" / "curados" / "dados_integrados_train.csv"
+AISLES_CSV = RAIZ / "dados" / "curados" / "catalogo_aisles_departamentos.csv"
+CARRINHO_CSV = RAIZ / "dados" / "amostras" / "pedidos_avaliacao_carrinho.csv"
 
 
 def mapa_nome_para_id():
-    """Dicionario nome da secao -> aisle_id, lido de aisles.csv."""
+    """Dicionario nome da secao -> aisle_id, lido de catalogo_aisles_departamentos.csv."""
     aisles = pd.read_csv(AISLES_CSV)
     return dict(zip(aisles["aisle"], aisles["aisle_id"].astype(int)))
 
@@ -57,19 +58,18 @@ def secoes_listadas_no_csv():
 
 
 def ordem_do_carrinho(order_ids):
-    """Para cada order_id, devolve (secoes, n_itens) a partir de dados_integrados_train.csv.
+    """Para cada order_id, devolve (secoes, n_itens) a partir de pedidos_avaliacao_carrinho.csv.
 
     secoes: aisle_id distintos na ordem do carrinho, ficando com a PRIMEIRA aparicao de
     cada secao (o cliente pode voltar a pegar item da mesma secao mais tarde).
     n_itens: quantidade de linhas (itens) do pedido no arquivo.
     Resultado: duas Series indexadas por order_id.
     """
-    if not INTEGRADOS_CSV.exists():
+    if not CARRINHO_CSV.exists():
         raise FileNotFoundError(
-            f"Nao encontrei {INTEGRADOS_CSV}. Rode o notebook notebooks/curadoria_dados_cenario5.ipynb "
-            "(a pasta dados/curados/ recebe o arquivo)."
+            f"Nao encontrei {CARRINHO_CSV}. Ele vem no repositorio (dados/amostras/)."
         )
-    itens = pd.read_csv(INTEGRADOS_CSV, usecols=["order_id", "aisle_id", "add_to_cart_order"])
+    itens = pd.read_csv(CARRINHO_CSV, usecols=["order_id", "aisle_id", "add_to_cart_order"])
     itens = itens[itens["order_id"].isin(order_ids)]                # so os pedidos que interessam
     itens = itens.sort_values(["order_id", "add_to_cart_order"])    # ordem do carrinho
 
@@ -79,7 +79,7 @@ def ordem_do_carrinho(order_ids):
 
     faltando = set(order_ids) - set(secoes.index)
     if faltando:
-        raise ValueError(f"Pedidos sem itens em dados_integrados_train.csv: {sorted(faltando)}")
+        raise ValueError(f"Pedidos sem itens em pedidos_avaliacao_carrinho.csv: {sorted(faltando)}")
     return secoes, n_itens
 
 
@@ -87,7 +87,7 @@ def carregar_pedidos_avaliacao():
     """Os 100 pedidos de avaliacao. DataFrame com as colunas:
         id_teste, order_id,
         n_itens            itens segundo o Pedidos.csv
-        n_itens_carrinho   itens segundo dados_integrados_train.csv (deve ser igual)
+        n_itens_carrinho   itens segundo pedidos_avaliacao_carrinho.csv (deve ser igual)
         secoes             aisle_id distintos NA ORDEM DO CARRINHO (usar em sigma_ref)
         secoes_listadas    aisle_id na ordem em que o Pedidos.csv lista (so para conferencia)
     """

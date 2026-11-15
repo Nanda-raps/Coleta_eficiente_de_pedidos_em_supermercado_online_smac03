@@ -118,7 +118,11 @@ def opt_e_exata(slots):
 def sigma_opt(slots, D, g):
     if opt_e_exata(slots):
         return held_karp(slots, D, g)
-    return dois_opt(sigma_nn(slots, D, g), D, g)
+    # Muitas secoes: heuristica. Melhora com 2-opt a rota do vizinho mais proximo e a da
+    # varredura em S, e fica com a menor (assim nunca perde para sigma_nn nem sigma_corr).
+    candidatas = [dois_opt(sigma_nn(slots, D, g), D, g),
+                  dois_opt(sigma_corr(slots, D, g), D, g)]
+    return min(candidatas, key=lambda ordem: custo_rota(ordem, D, g))
 
 
 def executar(estrategia, slots_carrinho, D, g):
