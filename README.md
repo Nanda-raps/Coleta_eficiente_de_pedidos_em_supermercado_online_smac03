@@ -49,8 +49,9 @@ src/          protótipo
   demo.py         demonstração de um pedido
   validacao_geometria.py  confere se o grafo reproduz a calibração dos modeladores
   experimento.py  3 layouts x 4 estratégias x 100 pedidos, com tabelas e verificação das hipóteses
+  graficos.py     figuras do experimento (PNG e PDF), a partir das tabelas de resultados/
 tests/        testes automatizados de cada módulo
-resultados/   gerada pelos scripts (matriz D, validação da geometria e tabelas do experimento)
+resultados/   gerada pelos scripts (matriz D, validação da geometria, tabelas do experimento e figuras/)
 relatorio/    relatório em LaTeX
 slides/       apresentação
 ```
@@ -119,6 +120,22 @@ Executa os 100 pedidos de avaliação em cada layout (L0, L1, L2) com cada estra
 
 Em 8 dos 100 pedidos (mais de 15 seções) o `opt` é heurística, não exato; a coluna `pedido_heuristico` os marca. O ganho contra `ref` é relativo à `ref` do próprio layout, então não serve para comparar o desempenho absoluto entre layouts.
 
+### Figuras
+
+```
+python src/graficos.py              # grava resultados/figuras/ (PNG e PDF, ~2 s)
+```
+
+Só lê os CSVs de `resultados/`, então rode antes `python src/experimento.py`. Gera três figuras, cada uma em PNG (200 dpi) e em PDF (vetorial, para o LaTeX):
+
+| Figura | Conteúdo |
+|---|---|
+| `fig1_distancia_boxplot` | distância por pedido em cada layout, um painel por estratégia (boxplots, com a média marcada) |
+| `fig2_reducao_layouts` | redução de L1 e L2 contra L0 e de L1 contra L2, com IC de 95% (H1 e H2) |
+| `fig3_ganho_faixa_secoes` | ganho contra `ref` por faixa de seções do pedido, um painel por layout (H3) |
+
+As cores foram validadas para daltonismo, e nenhuma figura depende só da cor: os layouts têm o nome no eixo e as estratégias têm marcadores diferentes. Os testes conferem as contas e a geração dos arquivos, mas não a aparência: abra as imagens para conferir.
+
 ### Testes
 
 ```
@@ -128,6 +145,7 @@ python tests/test_carga.py          # carga dos 100 pedidos
 python tests/test_indicadores.py    # tempo, ganho e bootstrap
 python tests/test_validacao_geometria.py  # validação da geometria (peças e contas à mão)
 python tests/test_experimento.py    # experimento e tabelas, com dados sintéticos e reais (~20 s)
+python tests/test_graficos.py       # dados das figuras e geração de PNG e PDF
 ```
 
 Cada teste imprime `OK` ao passar. Eles usam só arquivos que estão no repositório (`dados/amostras/` e `dados/curados/`).
@@ -139,11 +157,10 @@ Os arquivos grandes do Instacart não são versionados: cada integrante baixa os
 ## Papéis
 
 - **Dev A (Júlia):** grafo físico, matriz D, estratégias de rota e demonstração (`grafo_fisico.py`, `rotas.py`, `demo.py`).
-- **Dev B:** carga dos pedidos, indicadores, bootstrap, validação da geometria e experimento (`carga.py`, `indicadores.py`, `validacao_geometria.py`, `experimento.py`).
+- **Dev B:** carga dos pedidos, indicadores, bootstrap, validação da geometria, experimento e figuras (`carga.py`, `indicadores.py`, `validacao_geometria.py`, `experimento.py`, `graficos.py`).
 
 ## Pendente
 
-- Figuras do experimento (boxplots por layout, ganho × número de seções), a partir de `resultados/`.
 - Análise de sensibilidade de v, t_item, t_fixo e n_min.
 - `gerar_layouts.py` (geração de L1 e L2 no código), se os modeladores não enviarem o script.
 - Versões das bibliotecas em `requirements.txt`.
