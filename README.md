@@ -47,8 +47,10 @@ src/          protótipo
   carga.py        leitura dos pedidos e conversão de seções em slots
   indicadores.py  tempo, ganho, pedidos por turno e bootstrap
   demo.py         demonstração de um pedido
+  validacao_geometria.py  confere se o grafo reproduz a calibração dos modeladores
+  experimento.py  3 layouts x 4 estratégias x 100 pedidos, com tabelas e verificação das hipóteses
 tests/        testes automatizados de cada módulo
-resultados/   gerada pelos scripts (matriz D e, depois, tabelas e figuras)
+resultados/   gerada pelos scripts (matriz D, validação da geometria e tabelas do experimento)
 relatorio/    relatório em LaTeX
 slides/       apresentação
 ```
@@ -85,6 +87,38 @@ opt  (rota de custo minimo)         154.5 m    6.6 min      58%  [exata]
 python src/grafo_fisico.py          # salva a matriz D em resultados/D.npy
 ```
 
+### Validação da geometria
+
+```
+python src/validacao_geometria.py   # salva resultados/validacao_geometria.csv (~30 s)
+```
+
+O documento de modelagem não define o espaço entre slots, o hᵢ nem a posição das transversais; esses valores são premissas do grupo (`src/config.py`). O script recalcula, nos 1.000 pedidos da amostra de validação, a distância média em L0 e em L1 (n_min = 300) e compara com `dados/amostras/calibracao_n_min.csv` (L0 = 157,234 m; L1 = 144,783 m). Termina com erro se a diferença passar de `TOLERANCIA_VALIDACAO_M` (0,05 m).
+
+Nos pedidos com mais de 15 seções, a validação usa só vizinho mais próximo + 2-opt (e não o `opt` completo), que é o método que reproduz a calibração dos modeladores. Isso mede a geometria sem misturar com a heurística.
+
+### Experimento
+
+```
+python src/experimento.py           # grava as tabelas em resultados/ (~12 s)
+```
+
+Executa os 100 pedidos de avaliação em cada layout (L0, L1, L2) com cada estratégia (`ref`, `corr`, `nn`, `opt`), com a mesma matriz D. Os intervalos de confiança (95%) são por bootstrap pareado, com semente fixa (42). Arquivos gerados em `resultados/`:
+
+| Arquivo | Conteúdo |
+|---|---|
+| `resultados_por_pedido.csv` | uma linha por pedido, layout e estratégia (1.200 linhas): distância, tempo, ganho, nº de seções e de corredores |
+| `tabela_distancia.csv` | média, mediana e IC da distância, por layout e estratégia |
+| `tabela_reducao_layouts.csv` | redução de L1 e L2 contra L0, e de L1 contra L2, por estratégia |
+| `tabela_ganho.csv` | ganho de `corr`, `nn` e `opt` contra `ref`, por layout |
+| `tabela_ganho_faixa_secoes.csv` | ganho por faixa de seções distintas do pedido |
+| `tabela_ganho_faixa_corredores.csv` | ganho por faixa de corredores distintos visitados |
+| `tabela_tempo_turno.csv` | tempo médio de coleta e pedidos por turno |
+| `tabela_equivalencias.csv` | em quantos pedidos estratégias distintas dão a mesma distância |
+| `verificacao_hipoteses.csv` | H1 a H4, cada critério com o resultado (confirmada, contrariada, inconclusiva ou mista) |
+
+Em 8 dos 100 pedidos (mais de 15 seções) o `opt` é heurística, não exato; a coluna `pedido_heuristico` os marca. O ganho contra `ref` é relativo à `ref` do próprio layout, então não serve para comparar o desempenho absoluto entre layouts.
+
 ### Testes
 
 ```
@@ -92,6 +126,8 @@ python tests/test_grafo_fisico.py   # distâncias conferidas à mão, simetria, 
 python tests/test_rotas.py          # Held-Karp contra força bruta, 2-opt, varredura por corredores
 python tests/test_carga.py          # carga dos 100 pedidos
 python tests/test_indicadores.py    # tempo, ganho e bootstrap
+python tests/test_validacao_geometria.py  # validação da geometria (peças e contas à mão)
+python tests/test_experimento.py    # experimento e tabelas, com dados sintéticos e reais (~20 s)
 ```
 
 Cada teste imprime `OK` ao passar. Eles usam só arquivos que estão no repositório (`dados/amostras/` e `dados/curados/`).
@@ -103,8 +139,11 @@ Os arquivos grandes do Instacart não são versionados: cada integrante baixa os
 ## Papéis
 
 - **Dev A (Júlia):** grafo físico, matriz D, estratégias de rota e demonstração (`grafo_fisico.py`, `rotas.py`, `demo.py`).
-- **Dev B:** carga dos pedidos, indicadores, bootstrap e experimento (`carga.py`, `indicadores.py`, `experimento.py`).
+- **Dev B:** carga dos pedidos, indicadores, bootstrap, validação da geometria e experimento (`carga.py`, `indicadores.py`, `validacao_geometria.py`, `experimento.py`).
 
 ## Pendente
 
-- `src/experimento.py`: executar 3 layouts × 4 estratégias × 100 pedidos e gerar as tabelas e figuras em `resultados/`.
+- Figuras do experimento (boxplots por layout, ganho × número de seções), a partir de `resultados/`.
+- Análise de sensibilidade de v, t_item, t_fixo e n_min.
+- `gerar_layouts.py` (geração de L1 e L2 no código), se os modeladores não enviarem o script.
+- Versões das bibliotecas em `requirements.txt`.

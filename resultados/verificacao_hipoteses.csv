@@ -1,0 +1,43 @@
+hipotese,parte,estrategia,layout,n_pedidos,medida,valor,ic_inf,ic_sup,resultado
+H1,L1 vs L0,ref,-,100,reducao_pct,-6.677,-12.164,-1.369,contrariada
+H1,L1 vs L0,corr,-,100,reducao_pct,7.898,5.154,10.616,confirmada
+H1,L1 vs L0,nn,-,100,reducao_pct,8.385,4.755,12.069,confirmada
+H1,L1 vs L0,opt,-,100,reducao_pct,7.351,4.790,9.895,confirmada
+H1,L1 vs L0,as 4,-,100,resumo,,,,mista
+H1,L2 vs L0,ref,-,100,reducao_pct,15.805,10.755,20.691,confirmada
+H1,L2 vs L0,corr,-,100,reducao_pct,25.800,23.180,28.330,confirmada
+H1,L2 vs L0,nn,-,100,reducao_pct,18.110,13.373,22.572,confirmada
+H1,L2 vs L0,opt,-,100,reducao_pct,23.867,21.334,26.339,confirmada
+H1,L2 vs L0,as 4,-,100,resumo,,,,confirmada
+H2,L1 vs L2,ref,-,100,reducao_pct,-26.703,-35.352,-18.635,contrariada
+H2,L1 vs L2,corr,-,100,reducao_pct,-24.127,-28.086,-20.234,contrariada
+H2,L1 vs L2,nn,-,100,reducao_pct,-11.876,-18.294,-5.646,contrariada
+H2,L1 vs L2,opt,-,100,reducao_pct,-21.693,-25.376,-18.137,contrariada
+H2,L1 vs L2,as 4,-,100,resumo,,,,contrariada
+H3,ganho contra ref > 0,corr,L0,100,ganho_pct,39.371,35.212,43.226,confirmada
+H3,ganho contra ref > 0,nn,L0,100,ganho_pct,38.229,34.055,42.152,confirmada
+H3,ganho contra ref > 0,opt,L0,100,ganho_pct,40.659,36.428,44.618,confirmada
+H3,ganho contra ref > 0,corr,L1,100,ganho_pct,44.914,40.189,49.300,confirmada
+H3,ganho contra ref > 0,nn,L1,100,ganho_pct,44.154,39.463,48.510,confirmada
+H3,ganho contra ref > 0,opt,L1,100,ganho_pct,45.784,41.050,50.220,confirmada
+H3,ganho contra ref > 0,corr,L2,100,ganho_pct,43.440,38.763,48.034,confirmada
+H3,ganho contra ref > 0,nn,L2,100,ganho_pct,38.645,33.962,43.226,confirmada
+H3,ganho contra ref > 0,opt,L2,100,ganho_pct,43.592,38.930,48.182,confirmada
+H3,opt <= demais (pedidos exatos),opt,L0,92,pedidos_violando,0.000,,,confirmada
+H3,opt <= demais (pedidos heuristicos),opt,L0,8,pedidos_violando,0.000,,,confirmada
+H3,opt <= demais (pedidos exatos),opt,L1,92,pedidos_violando,0.000,,,confirmada
+H3,opt <= demais (pedidos heuristicos),opt,L1,8,pedidos_violando,0.000,,,confirmada
+H3,opt <= demais (pedidos exatos),opt,L2,92,pedidos_violando,0.000,,,confirmada
+H3,opt <= demais (pedidos heuristicos),opt,L2,8,pedidos_violando,0.000,,,confirmada
+H3,ganho cresce com |S(o)| (faixas),corr,L0,100,quedas_entre_faixas,0.000,,,confirmada
+H3,ganho cresce com |S(o)| (faixas),nn,L0,100,quedas_entre_faixas,0.000,,,confirmada
+H3,ganho cresce com |S(o)| (faixas),opt,L0,100,quedas_entre_faixas,0.000,,,confirmada
+H3,ganho cresce com |S(o)| (faixas),corr,L1,100,quedas_entre_faixas,0.000,,,confirmada
+H3,ganho cresce com |S(o)| (faixas),nn,L1,100,quedas_entre_faixas,0.000,,,confirmada
+H3,ganho cresce com |S(o)| (faixas),opt,L1,100,quedas_entre_faixas,0.000,,,confirmada
+H3,ganho cresce com |S(o)| (faixas),corr,L2,100,quedas_entre_faixas,0.000,,,confirmada
+H3,ganho cresce com |S(o)| (faixas),nn,L2,100,quedas_entre_faixas,0.000,,,confirmada
+H3,ganho cresce com |S(o)| (faixas),opt,L2,100,quedas_entre_faixas,0.000,,,confirmada
+H4,1 secao: as 4 estrategias iguais,as 4,L0,9,pedidos_diferentes,0.000,,,confirmada
+H4,1 secao: as 4 estrategias iguais,as 4,L1,9,pedidos_diferentes,0.000,,,confirmada
+H4,1 secao: as 4 estrategias iguais,as 4,L2,9,pedidos_diferentes,0.000,,,confirmada
