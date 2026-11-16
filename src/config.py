@@ -40,3 +40,9 @@ BOOTSTRAP = {
     "repeticoes": 10000,    # quantas vezes os pedidos sao re-sorteados
     "nivel": 0.95,          # intervalo de confianca de 95%
 }
+
+# Validacao da geometria (usado em validacao_geometria.py)
+# Diferenca maxima aceita, em metros, entre a distancia media recalculada na amostra de validacao
+# e a de calibracao_n_min.csv. Premissa: o plano registra diferencas de 0,010 m (L0) e 0,019 m (L1)
+# com h_i = 0; a sobra vem, provavelmente, dos pedidos com mais de 15 secoes (sigma_opt heuristica).
+TOLERANCIA_VALIDACAO_M = 0.05
