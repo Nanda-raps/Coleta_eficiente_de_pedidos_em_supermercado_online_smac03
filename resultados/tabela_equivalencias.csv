@@ -1,0 +1,25 @@
+layout,caso,n_pedidos,pct_pedidos,n_pedidos_2mais_secoes,pct_pedidos_2mais_secoes
+L0,ref = corr,14,14.000,5,5.495
+L0,ref = nn,15,15.000,6,6.593
+L0,ref = opt,14,14.000,5,5.495
+L0,corr = nn,40,40.000,31,34.066
+L0,corr = opt,55,55.000,46,50.549
+L0,nn = opt,60,60.000,51,56.044
+L0,qualquer par,79,79.000,70,76.923
+L0,as 4 iguais,14,14.000,5,5.495
+L1,ref = corr,14,14.000,5,5.495
+L1,ref = nn,15,15.000,6,6.593
+L1,ref = opt,15,15.000,6,6.593
+L1,corr = nn,54,54.000,45,49.451
+L1,corr = opt,62,62.000,53,58.242
+L1,nn = opt,65,65.000,56,61.538
+L1,qualquer par,79,79.000,70,76.923
+L1,as 4 iguais,14,14.000,5,5.495
+L2,ref = corr,16,16.000,7,7.692
+L2,ref = nn,17,17.000,8,8.791
+L2,ref = opt,16,16.000,7,7.692
+L2,corr = nn,64,64.000,55,60.440
+L2,corr = opt,95,95.000,86,94.505
+L2,nn = opt,67,67.000,58,63.736
+L2,qualquer par,98,98.000,89,97.802
+L2,as 4 iguais,16,16.000,7,7.692
