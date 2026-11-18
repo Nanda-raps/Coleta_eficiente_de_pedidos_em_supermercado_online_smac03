@@ -1,25 +1,15 @@
-"""Analise de sensibilidade dos parametros de tempo (v, t_item, t_fixo).
+# Pergunta: se v, t_item e t_fixo fossem outros, as conclusoes mudariam?
+# Como T = D/v + t_item * itens + t_fixo, e os dois ultimos termos dependem so do pedido,
+# a ORDEM dos casos nao deve mudar; mudam o tamanho das diferencas e os pedidos por turno.
+# Este script confere isso.
+#
+# Nao refaz rotas: le resultados/resultados_por_pedido.csv e so recalcula o tempo, em 10 cenarios
+# (config.SENSIBILIDADE; o base e config.TEMPO): base, um parametro por vez (7),
+# pessimista (tudo no pior) e otimista (tudo no melhor).
+# Saidas: resultados/tabela_sensibilidade.csv e figuras/fig4_sensibilidade_pedidos_turno (PNG e PDF).
+#
+# Uso (depois de python src/experimento.py): python src/sensibilidade.py
 
-Os valores de tempo sao premissas do grupo (modelagem 3.5), nao medidas. A pergunta aqui e: se esses valores
-estivessem diferentes, as conclusoes mudariam? Como T(o) = D/v + t_item * |o| + t_fixo, e os dois ultimos
-termos dependem so do pedido (nao da rota nem do layout), a ORDEM dos casos nao deveria mudar; o que muda e
-o tamanho das diferencas, os minutos e os pedidos por turno. Este script confere isso.
-
-Nao refaz nenhuma rota: le resultados/resultados_por_pedido.csv (distancia e itens de cada pedido) e so
-recalcula o tempo. Cenarios (config.SENSIBILIDADE; o caso base e config.TEMPO):
-    base           os valores de config.TEMPO
-    um por vez     um parametro assume cada um de seus outros valores, os demais ficam no base (7 cenarios)
-    pessimista     tudo no pior: v minima, t_item e t_fixo maximos
-    otimista       tudo no melhor: v maxima, t_item e t_fixo minimos
-Sao 10 cenarios x 12 casos (3 layouts x 4 estrategias) = 120 linhas.
-
-Saidas (em resultados/):
-    tabela_sensibilidade.csv
-    figuras/fig4_sensibilidade_pedidos_turno.png e .pdf   (pedidos por turno: faixa pessimista a otimista)
-
-Uso (na raiz do repositorio, depois de rodar python src/experimento.py):
-    python src/sensibilidade.py
-"""
 import pandas as pd
 
 from config import LAYOUTS, PASTA_RESULTADOS, SENSIBILIDADE, TEMPO
@@ -31,11 +21,8 @@ SAIDA_TABELA = PASTA_RESULTADOS / "tabela_sensibilidade.csv"
 
 
 def cenarios():
-    """Lista dos cenarios, cada um um dicionario: cenario, tipo, parametro, velocidade, t_item, t_fixo.
-
-    A ordem e: base, um por vez (velocidade, t_item e t_fixo, pulando o valor igual ao do base),
-    pessimista e otimista.
-    """
+    # Lista de cenarios (dicionarios): base, um parametro por vez (pulando o valor igual ao base),
+    # pessimista e otimista.
     base = {"velocidade": TEMPO["velocidade"], "t_item": TEMPO["t_item"], "t_fixo": TEMPO["t_fixo"]}
     lista = [{"cenario": "base", "tipo": "base", "parametro": "-", **base}]
     for parametro, valores in SENSIBILIDADE.items():
@@ -52,12 +39,7 @@ def cenarios():
 
 
 def calcular_cenario(resultados, cenario):
-    """Tempo medio e pedidos por turno de cada caso (layout x estrategia) em UM cenario.
-
-    resultados: o DataFrame de resultados_por_pedido.csv (precisa de layout, estrategia, distancia_m, n_itens).
-    O tempo de cada pedido usa indicadores.tempo_coleta, e os pedidos por turno, indicadores.pedidos_por_turno
-    (H dividido pela MEDIA dos tempos). Devolve uma lista de dicionarios, um por caso.
-    """
+    # Tempo medio e pedidos por turno de cada caso (layout x estrategia) em UM cenario.
     tempo = {**TEMPO, "velocidade": cenario["velocidade"], "t_item": cenario["t_item"],
              "t_fixo": cenario["t_fixo"]}
     linhas = []
@@ -75,17 +57,14 @@ def calcular_cenario(resultados, cenario):
 
 
 def ordem_dos_casos(linhas):
-    """Os casos (layout, estrategia) do menor para o maior tempo medio; empate desfeito pelo nome."""
+    # Casos (layout, estrategia) do menor ao maior tempo medio; empate desfeito pelo nome.
     ordenadas = sorted(linhas, key=lambda l: (l["tempo_medio_s"], l["layout"], l["estrategia"]))
     return [(l["layout"], l["estrategia"]) for l in ordenadas]
 
 
 def tabela_sensibilidade(resultados):
-    """Tabela com todos os cenarios (120 linhas).
-
-    ranking_igual_ao_base: True se, neste cenario, a ordem dos 12 casos por tempo medio e a mesma do caso base.
-    E uma propriedade do cenario inteiro, repetida nas linhas dele.
-    """
+    # Tabela com todos os cenarios (120 linhas).
+    # ranking_igual_ao_base = True se a ordem dos 12 casos neste cenario e a mesma do caso base.
     por_cenario = {c["cenario"]: calcular_cenario(resultados, c) for c in cenarios()}
     ordem_base = ordem_dos_casos(por_cenario["base"])
     linhas = []
@@ -102,7 +81,7 @@ def main():
     tabela.to_csv(SAIDA_TABELA, index=False, float_format="%.3f")
     figuras = figura_sensibilidade(tabela, PASTA_FIGURAS / "fig4_sensibilidade_pedidos_turno")
 
-    # resumo: pedidos por turno em dois casos de referencia, e se o ranking se manteve
+    # Resumo no terminal: pedidos por turno em L0 com ref e em L2 com opt, e se o ranking se manteve.
     pior = tabela[(tabela["layout"] == "L0") & (tabela["estrategia"] == "ref")].set_index("cenario")
     melhor = tabela[(tabela["layout"] == "L2") & (tabela["estrategia"] == "opt")].set_index("cenario")
     resumo = pd.DataFrame({"L0+ref": pior["pedidos_turno"], "L2+opt": melhor["pedidos_turno"],

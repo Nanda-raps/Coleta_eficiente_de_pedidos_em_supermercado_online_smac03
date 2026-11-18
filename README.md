@@ -28,7 +28,7 @@ A comparação usa 100 pedidos reais do dataset [Instacart Market Basket Analysi
 | L1 | Seções com maior afinidade de compra (Lift) ficam próximas. |
 | L2 | Seções mais pedidas ficam nos slots de menor deslocamento entre ENTRADA e CAIXA. |
 
-Os parâmetros do modelo ficam em `src/config.py`, e cada valor indica se vem do documento de modelagem ou se é premissa do grupo.
+Os parâmetros do modelo ficam em `src/config.py`, cada um com seu papel e sua unidade comentados.
 
 ## Estrutura
 
@@ -59,7 +59,7 @@ slides/       apresentação
 
 ## Como executar
 
-Requer Python 3 (testado com 3.10). Todos os comandos rodam na **raiz do repositório**.
+Requer Python 3 (testado com 3.10). Todos os comandos rodam na **raiz do repositório**. 
 
 ```
 pip install -r requirements.txt
@@ -175,12 +175,4 @@ Cada teste imprime `OK` ao passar. Eles usam só arquivos que estão no reposit�
 
 Os arquivos grandes do Instacart não são versionados: cada integrante baixa os CSVs e os coloca em `dados/instacart/`, e o notebook `notebooks/curadoria_dados_cenario5.ipynb` recria as tabelas curadas. Detalhes e cuidados (por exemplo, qual tabela de coocorrência não usar para gerar L1 e L2) estão em `dados/README.md`.
 
-## Papéis
 
-- **Dev A (Júlia):** grafo físico, matriz D, estratégias de rota e demonstração (`grafo_fisico.py`, `rotas.py`, `demo.py`).
-- **Dev B:** carga dos pedidos, indicadores, bootstrap, validação da geometria, experimento, figuras e sensibilidade (`carga.py`, `indicadores.py`, `validacao_geometria.py`, `experimento.py`, `graficos.py`, `sensibilidade.py`).
-
-## Pendente
-
-- `gerar_layouts.py` (geração de L1 e L2 no código), se os modeladores não enviarem o script.
-- Versões das bibliotecas em `requirements.txt`.

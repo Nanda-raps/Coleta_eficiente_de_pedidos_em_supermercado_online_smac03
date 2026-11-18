@@ -1,48 +1,43 @@
-"""Carga dos pedidos de avaliacao: de Pedidos.csv ate a lista de slots a visitar.
+# Transforma os pedidos de avaliacao em listas de slots a visitar.
+# Caminho dos dados ate a rota:
+#   nome da secao -> aisle_id (catalogo) -> (corredor, posicao) (layout) -> numero do slot em D
+# A ordem do carrinho nao vem do Pedidos.csv (em 82 dos 100 pedidos a ordem difere):
+# vem de pedidos_avaliacao_carrinho.csv, coluna add_to_cart_order.
+#
+# Uso:
+#   pedidos = carregar_pedidos_avaliacao()
+#   _, mapa = carregar_layout('L1')
+#   slots = slots_do_pedido(pedidos.loc[0, 'secoes'], mapa, g)
 
-O Pedidos.csv traz, para cada um dos 100 pedidos, os NOMES das secoes, numa ordem que
-NAO e a do carrinho (em 82 dos 100 pedidos a ordem difere). Para a estrategia sigma_ref
-precisamos da ordem em que o cliente colocou os itens no carrinho. Ela vem de
-dados/amostras/pedidos_avaliacao_carrinho.csv (itens dos 100 pedidos, extraidos de
-dados_integrados_train.csv), coluna add_to_cart_order.
-
-Caminho dos dados ate a rota:
-    nome da secao --(catalogo_aisles_departamentos.csv)--> aisle_id
-    aisle_id, na ordem do carrinho --(layout)--> (corredor, posicao) --> indice do slot em D
-
-Uso:
-    pedidos = carregar_pedidos_avaliacao()
-    _, mapa = carregar_layout("L1")
-    slots = slots_do_pedido(pedidos.loc[0, "secoes"], mapa, g)
-"""
 import pandas as pd
 
 from config import RAIZ
 
+# Arquivos de entrada.
 PEDIDOS_CSV = RAIZ / "dados" / "amostras" / "Pedidos.csv"
 AISLES_CSV = RAIZ / "dados" / "curados" / "catalogo_aisles_departamentos.csv"
 CARRINHO_CSV = RAIZ / "dados" / "amostras" / "pedidos_avaliacao_carrinho.csv"
 
 
 def mapa_nome_para_id():
-    """Dicionario nome da secao -> aisle_id, lido de catalogo_aisles_departamentos.csv."""
+    # Dicionario nome da secao -> aisle_id.
     aisles = pd.read_csv(AISLES_CSV)
     return dict(zip(aisles["aisle"], aisles["aisle_id"].astype(int)))
 
 
 def secoes_listadas_no_csv():
-    """Le Pedidos.csv. Devolve um DataFrame com as colunas:
-        id_teste, order_id, n_itens (coluna "itens no pedido"),
-        secoes_listadas (aisle_id na ordem em que o CSV lista os nomes).
-    """
+    # Le o Pedidos.csv e devolve id_teste, order_id, n_itens e as secoes (aisle_id)
+    # na ordem em que o CSV as lista.
     if not PEDIDOS_CSV.exists():
         raise FileNotFoundError(f"Nao encontrei {PEDIDOS_CSV}")
-    brutos = pd.read_csv(PEDIDOS_CSV, encoding="utf-8-sig")        # o arquivo comeca com BOM
+    # utf-8-sig porque o arquivo comeca com BOM.
+    brutos = pd.read_csv(PEDIDOS_CSV, encoding="utf-8-sig")
     nome_para_id = mapa_nome_para_id()
 
     def nomes_para_ids(texto):
+        # Converte 'secao A; secao B' em [id_A, id_B]; erro se algum nome nao existir no catalogo.
         ids = []
-        for nome in texto.split(";"):                               # nomes separados por "; "
+        for nome in texto.split(";"):
             nome = nome.strip()
             if nome not in nome_para_id:
                 raise ValueError(f"Secao desconhecida em Pedidos.csv: {nome!r}")
@@ -58,23 +53,21 @@ def secoes_listadas_no_csv():
 
 
 def ordem_do_carrinho(order_ids):
-    """Para cada order_id, devolve (secoes, n_itens) a partir de pedidos_avaliacao_carrinho.csv.
-
-    secoes: aisle_id distintos na ordem do carrinho, ficando com a PRIMEIRA aparicao de
-    cada secao (o cliente pode voltar a pegar item da mesma secao mais tarde).
-    n_itens: quantidade de linhas (itens) do pedido no arquivo.
-    Resultado: duas Series indexadas por order_id.
-    """
+    # Para cada order_id, devolve (secoes, n_itens) a partir de pedidos_avaliacao_carrinho.csv.
+    # secoes = aisle_id distintos na ordem do carrinho (fica a PRIMEIRA aparicao de cada secao).
+    # n_itens = linhas (itens) do pedido.
     if not CARRINHO_CSV.exists():
         raise FileNotFoundError(
             f"Nao encontrei {CARRINHO_CSV}. Ele vem no repositorio (dados/amostras/)."
         )
     itens = pd.read_csv(CARRINHO_CSV, usecols=["order_id", "aisle_id", "add_to_cart_order"])
-    itens = itens[itens["order_id"].isin(order_ids)]                # so os pedidos que interessam
-    itens = itens.sort_values(["order_id", "add_to_cart_order"])    # ordem do carrinho
+    # So os pedidos de interesse, na ordem do carrinho.
+    itens = itens[itens["order_id"].isin(order_ids)]
+    itens = itens.sort_values(["order_id", "add_to_cart_order"])
 
     n_itens = itens.groupby("order_id").size()
-    primeiras = itens.drop_duplicates(["order_id", "aisle_id"])     # mantem a 1a aparicao de cada secao
+    # Mantem so a 1a aparicao de cada secao em cada pedido.
+    primeiras = itens.drop_duplicates(["order_id", "aisle_id"])
     secoes = primeiras.groupby("order_id")["aisle_id"].apply(lambda s: [int(a) for a in s])
 
     faltando = set(order_ids) - set(secoes.index)
@@ -84,13 +77,10 @@ def ordem_do_carrinho(order_ids):
 
 
 def carregar_pedidos_avaliacao():
-    """Os 100 pedidos de avaliacao. DataFrame com as colunas:
-        id_teste, order_id,
-        n_itens            itens segundo o Pedidos.csv
-        n_itens_carrinho   itens segundo pedidos_avaliacao_carrinho.csv (deve ser igual)
-        secoes             aisle_id distintos NA ORDEM DO CARRINHO (usar em sigma_ref)
-        secoes_listadas    aisle_id na ordem em que o Pedidos.csv lista (so para conferencia)
-    """
+    # Os 100 pedidos de avaliacao: id_teste, order_id, n_itens,
+    # n_itens_carrinho (deve ser igual a n_itens),
+    # secoes (aisle_id na ordem do carrinho, usada pela ref) e
+    # secoes_listadas (ordem do Pedidos.csv, so para conferencia).
     pedidos = secoes_listadas_no_csv()
     secoes, n_itens = ordem_do_carrinho(list(pedidos["order_id"]))
     pedidos["n_itens_carrinho"] = pedidos["order_id"].map(n_itens)
@@ -99,9 +89,6 @@ def carregar_pedidos_avaliacao():
 
 
 def slots_do_pedido(secoes, mapa_layout, g):
-    """Converte secoes (aisle_id) em indices de slot, mantendo a ordem.
-
-    mapa_layout: dicionario aisle_id -> (corredor, posicao), vindo de carregar_layout(...)[1].
-    g: GrafoFisico (g.indice_slot converte (corredor, posicao) no indice usado em D).
-    """
+    # Converte secoes (aisle_id) em numeros de slot, mantendo a ordem.
+    # mapa_layout vem de carregar_layout(...)[1]; g.indice_slot converte (corredor, posicao) no indice de D.
     return [g.indice_slot(*mapa_layout[a]) for a in secoes]

@@ -1,89 +1,77 @@
-# config.py
-# Guarda todos os numeros (parametros) do prototipo em um unico lugar.
-# Os outros arquivos importam daqui; para mudar algo (ex.: tamanho do corredor),
-# basta alterar o valor neste arquivo.
+# Todos os parametros do prototipo ficam aqui; os outros arquivos importam deste.
+
 from pathlib import Path
 
-# ---------- Caminhos dos arquivos ----------
 
-# RAIZ e a pasta principal do projeto.
-# __file__ e este arquivo (src/config.py); o 1o .parent sobe para src/ e o 2o sobe para a raiz.
+# Pasta raiz do projeto (src/config.py -> sobe duas pastas).
 RAIZ = Path(__file__).resolve().parent.parent
 
-# CSV de cada layout (L0, L1, L2). Cada CSV diz qual secao fica em qual slot da loja.
+# CSV de cada layout: diz em que corredor e posicao fica cada secao.
 LAYOUTS = {
     "L0": RAIZ / "dados" / "layouts" / "layout_L0.csv",
     "L1": RAIZ / "dados" / "layouts" / "layout_L1_final.csv",
     "L2": RAIZ / "dados" / "layouts" / "layout_L2_final.csv",
 }
 
-# Pasta onde os resultados gerados (ex.: a matriz D.npy) sao salvos.
+# Pasta onde os scripts gravam tabelas, figuras e a matriz D.
 PASTA_RESULTADOS = RAIZ / "resultados"
 
-# ---------- Geometria da loja (em metros) ----------
 
-# Cada corredor tem 20 m de comprimento.
+# Geometria da loja, em metros.
+# Cada corredor tem 20 m e 8 slots (2 dos 17 corredores tem 7: 134 slots no total).
 COMPRIMENTO_CORREDOR = 20.0
 
-# Cada corredor tem 8 slots (prateleiras); 2 dos 17 corredores tem 7 (os 134 slots no total).
 SLOTS_POR_CORREDOR = 8
 
-# Medidas usadas em grafo_fisico.py para calcular as coordenadas (x, y) de cada ponto.
+# Medidas usadas em grafo_fisico.py para calcular as coordenadas (x, y) dos pontos.
 GEOMETRIA = {
-    # Distancia em x entre o eixo de um corredor e o do corredor vizinho.
+    # x entre o eixo de um corredor e o do corredor vizinho.
     "espaco_eixos": 4.0,
-    # Tamanho da "fatia" de cada slot ao longo do corredor: 20 m / 8 slots = 2,5 m.
+    # Fatia de cada slot ao longo do corredor: 20 m / 8 = 2,5 m.
     "espaco_slots": COMPRIMENTO_CORREDOR / SLOTS_POR_CORREDOR,
-    # Posicao y do slot 1: o ponto fica no CENTRO da primeira fatia (2,5 m / 2 = 1,25 m).
+    # y do slot 1: o centro da primeira fatia (2,5 m / 2 = 1,25 m).
     "y_primeiro_slot": COMPRIMENTO_CORREDOR / SLOTS_POR_CORREDOR / 2,
-    # Profundidade lateral h_i: distancia entre o eixo do corredor e a prateleira.
-    # Com 0, o slot fica exatamente no eixo e a aresta slot -> acesso pesa 0 m.
-    # Mantido em 0 porque assim o resultado reproduz o calibracao_n_min.csv.
+    # Profundidade h_i entre o eixo do corredor e a prateleira.
+    # Com 0, o slot fica no eixo e a aresta slot-acesso pesa 0 m (valor que reproduz calibracao_n_min.csv).
     "h_lateral": 0.0,
-    # Posicao y da passagem da frente da loja (onde ficam a ENTRADA e a CAIXA).
+    # y da passagem da frente, onde ficam ENTRADA e CAIXA.
     "y_transversal_frente": 0.0,
-    # Posicao y da passagem do fundo, no fim do corredor (y = 20 m).
+    # y da passagem do fundo (fim do corredor).
     "y_transversal_fundo": COMPRIMENTO_CORREDOR,
 }
 
-# ---------- Rotas ----------
 
-# Ate este numero de secoes distintas no pedido, a rota otima e calculada de forma exata
-# (Held-Karp). Acima disso, usa-se uma heuristica (vizinho mais proximo + 2-opt).
+# Ate 15 secoes distintas no pedido, a rota otima e exata (Held-Karp); acima disso, heuristica.
 LIMITE_HELD_KARP = 15
 
-# ---------- Tempo de coleta ----------
 
-# Usado em indicadores.py na formula: T(o) = D/v + t_item * |o| + t_fixo
+# Tempo de coleta (indicadores.py): T = D/v + t_item * itens + t_fixo.
+# velocidade em m/s; t_item e t_fixo em segundos; turno = duracao H (8 h) em segundos.
 TEMPO = {
-    "velocidade": 1.0,      # v: velocidade do funcionario, em m/s
-    "t_item": 15.0,         # tempo para separar cada item, em segundos
-    "t_fixo": 120.0,        # tempo fixo por pedido, em segundos
-    "turno": 28800.0,       # H: duracao do turno (8 horas), em segundos
+    "velocidade": 1.0,
+    "t_item": 15.0,
+    "t_fixo": 120.0,
+    "turno": 28800.0,
 }
 
-# ---------- Estatistica ----------
 
-# Semente fixa de todos os sorteios: com ela, rodar de novo da exatamente o mesmo resultado.
+# Semente fixa de todos os sorteios: rodar de novo da exatamente o mesmo resultado.
 SEMENTE = 42
 
-# Bootstrap pareado (usado em indicadores.py).
+# Bootstrap pareado (indicadores.py): 10.000 re-sorteios e intervalo de confianca de 95%.
 BOOTSTRAP = {
-    "repeticoes": 10000,    # quantas vezes os pedidos sao re-sorteados
-    "nivel": 0.95,          # intervalo de confianca de 95%
+    "repeticoes": 10000,
+    "nivel": 0.95,
 }
 
-# Validacao da geometria (usado em validacao_geometria.py)
-# Diferenca maxima aceita, em metros, entre a distancia media recalculada na amostra de validacao
-# e a de calibracao_n_min.csv. Premissa: o plano registra diferencas de 0,010 m (L0) e 0,019 m (L1)
-# com h_i = 0; a sobra vem, provavelmente, dos pedidos com mais de 15 secoes (sigma_opt heuristica).
+# Diferenca maxima aceita, em metros, entre a distancia recalculada em validacao_geometria.py
+# e a de calibracao_n_min.csv.
 TOLERANCIA_VALIDACAO_M = 0.05
 
-# Analise de sensibilidade (usado em sensibilidade.py): valores testados de cada parametro de tempo.
-# As faixas (v de 0,8 a 1,1; t_item de 10 a 20; t_fixo de 60 a 180) vem do documento de modelagem (3.5);
-# os passos intermediarios (0,9 m/s; 15 s; 120 s) sao escolha nossa. O caso base e o dicionario TEMPO.
+# Valores de tempo testados em sensibilidade.py. As faixas vem do documento de modelagem (3.5);
+# o caso base e o dicionario TEMPO.
 SENSIBILIDADE = {
-    "velocidade": (0.8, 0.9, 1.0, 1.1),     # m/s
-    "t_item": (10.0, 15.0, 20.0),           # segundos por item
-    "t_fixo": (60.0, 120.0, 180.0),         # segundos por pedido
+    "velocidade": (0.8, 0.9, 1.0, 1.1),
+    "t_item": (10.0, 15.0, 20.0),
+    "t_fixo": (60.0, 120.0, 180.0),
 }
