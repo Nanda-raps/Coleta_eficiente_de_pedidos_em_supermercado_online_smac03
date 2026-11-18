@@ -46,3 +46,12 @@ BOOTSTRAP = {
 # e a de calibracao_n_min.csv. Premissa: o plano registra diferencas de 0,010 m (L0) e 0,019 m (L1)
 # com h_i = 0; a sobra vem, provavelmente, dos pedidos com mais de 15 secoes (sigma_opt heuristica).
 TOLERANCIA_VALIDACAO_M = 0.05
+
+# Analise de sensibilidade (usado em sensibilidade.py): valores testados de cada parametro de tempo.
+# As faixas (v de 0,8 a 1,1; t_item de 10 a 20; t_fixo de 60 a 180) vem do documento de modelagem (3.5);
+# os passos intermediarios (0,9 m/s; 15 s; 120 s) sao escolha nossa. O caso base e o dicionario TEMPO.
+SENSIBILIDADE = {
+    "velocidade": (0.8, 0.9, 1.0, 1.1),     # m/s
+    "t_item": (10.0, 15.0, 20.0),           # segundos por item
+    "t_fixo": (60.0, 120.0, 180.0),         # segundos por pedido
+}

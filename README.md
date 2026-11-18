@@ -50,6 +50,7 @@ src/          protótipo
   validacao_geometria.py  confere se o grafo reproduz a calibração dos modeladores
   experimento.py  3 layouts x 4 estratégias x 100 pedidos, com tabelas e verificação das hipóteses
   graficos.py     figuras do experimento (PNG e PDF), a partir das tabelas de resultados/
+  sensibilidade.py  análise de sensibilidade dos parâmetros de tempo (tabela e figura)
 tests/        testes automatizados de cada módulo
 resultados/   gerada pelos scripts (matriz D, validação da geometria, tabelas do experimento e figuras/)
 relatorio/    relatório em LaTeX
@@ -136,6 +137,25 @@ Só lê os CSVs de `resultados/`, então rode antes `python src/experimento.py`.
 
 As cores foram validadas para daltonismo, e nenhuma figura depende só da cor: os layouts têm o nome no eixo e as estratégias têm marcadores diferentes. Os testes conferem as contas e a geração dos arquivos, mas não a aparência: abra as imagens para conferir.
 
+### Sensibilidade
+
+```
+python src/sensibilidade.py         # grava a tabela e a figura 4 (~2 s)
+```
+
+Os valores de tempo (velocidade, tempo por item e tempo fixo) são premissas do grupo, não medidas. O script recalcula o tempo e os pedidos por turno em 10 cenários e confere se a ordem dos 12 casos (layout × estratégia) muda:
+
+- o **caso base** (`TEMPO`, em `src/config.py`);
+- **um parâmetro de cada vez**: velocidade de 0,8 a 1,1 m/s, tempo por item de 10 a 20 s e tempo fixo de 60 a 180 s (valores em `SENSIBILIDADE`, em `src/config.py`);
+- um cenário **pessimista** (tudo no pior) e um **otimista** (tudo no melhor).
+
+Não refaz rotas: lê `resultados/resultados_por_pedido.csv` (rode antes o experimento). Saídas:
+
+- `resultados/tabela_sensibilidade.csv`: 120 linhas (10 cenários × 12 casos). A coluna `ranking_igual_ao_base` diz se a ordem dos casos se manteve naquele cenário.
+- `resultados/figuras/fig4_sensibilidade_pedidos_turno` (PNG e PDF): para cada caso, uma barra do cenário pessimista ao otimista e um ponto no caso base.
+
+O ranking é comparado **dentro de cada cenário**: as barras de casos diferentes podem se sobrepor sem que isso signifique que a ordem mudou. Como o tempo é D/v mais termos que dependem só do pedido, a ordem não muda; o que muda é o número de pedidos por turno. A sensibilidade do `n_min` é a tabela `dados/amostras/calibracao_n_min.csv`, feita pelos modeladores.
+
 ### Testes
 
 ```
@@ -146,6 +166,7 @@ python tests/test_indicadores.py    # tempo, ganho e bootstrap
 python tests/test_validacao_geometria.py  # validação da geometria (peças e contas à mão)
 python tests/test_experimento.py    # experimento e tabelas, com dados sintéticos e reais (~20 s)
 python tests/test_graficos.py       # dados das figuras e geração de PNG e PDF
+python tests/test_sensibilidade.py  # cenários, contas à mão e detecção de mudança no ranking
 ```
 
 Cada teste imprime `OK` ao passar. Eles usam só arquivos que estão no repositório (`dados/amostras/` e `dados/curados/`).
@@ -157,10 +178,9 @@ Os arquivos grandes do Instacart não são versionados: cada integrante baixa os
 ## Papéis
 
 - **Dev A (Júlia):** grafo físico, matriz D, estratégias de rota e demonstração (`grafo_fisico.py`, `rotas.py`, `demo.py`).
-- **Dev B:** carga dos pedidos, indicadores, bootstrap, validação da geometria, experimento e figuras (`carga.py`, `indicadores.py`, `validacao_geometria.py`, `experimento.py`, `graficos.py`).
+- **Dev B:** carga dos pedidos, indicadores, bootstrap, validação da geometria, experimento, figuras e sensibilidade (`carga.py`, `indicadores.py`, `validacao_geometria.py`, `experimento.py`, `graficos.py`, `sensibilidade.py`).
 
 ## Pendente
 
-- Análise de sensibilidade de v, t_item, t_fixo e n_min.
 - `gerar_layouts.py` (geração de L1 e L2 no código), se os modeladores não enviarem o script.
 - Versões das bibliotecas em `requirements.txt`.

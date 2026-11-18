@@ -1,0 +1,121 @@
+cenario,tipo,parametro_variado,velocidade_m_s,t_item_s,t_fixo_s,layout,estrategia,tempo_medio_s,pedidos_turno,ranking_igual_ao_base
+base,base,-,1.000,15.000,120.000,L0,ref,595.255,48.383,True
+base,base,-,1.000,15.000,120.000,L0,corr,442.025,65.155,True
+base,base,-,1.000,15.000,120.000,L0,nn,447.145,64.409,True
+base,base,-,1.000,15.000,120.000,L0,opt,437.400,65.844,True
+base,base,-,1.000,15.000,120.000,L1,ref,616.180,46.740,True
+base,base,-,1.000,15.000,120.000,L1,corr,429.375,67.074,True
+base,base,-,1.000,15.000,120.000,L1,nn,433.285,66.469,True
+base,base,-,1.000,15.000,120.000,L1,opt,425.965,67.611,True
+base,base,-,1.000,15.000,120.000,L2,ref,545.720,52.774,True
+base,base,-,1.000,15.000,120.000,L2,corr,400.700,71.874,True
+base,base,-,1.000,15.000,120.000,L2,nn,417.210,69.030,True
+base,base,-,1.000,15.000,120.000,L2,opt,400.275,71.951,True
+velocidade = 0.8,um por vez,velocidade,0.800,15.000,120.000,L0,ref,673.606,42.755,True
+velocidade = 0.8,um por vez,velocidade,0.800,15.000,120.000,L0,corr,482.069,59.743,True
+velocidade = 0.8,um por vez,velocidade,0.800,15.000,120.000,L0,nn,488.469,58.960,True
+velocidade = 0.8,um por vez,velocidade,0.800,15.000,120.000,L0,opt,476.288,60.468,True
+velocidade = 0.8,um por vez,velocidade,0.800,15.000,120.000,L1,ref,699.763,41.157,True
+velocidade = 0.8,um por vez,velocidade,0.800,15.000,120.000,L1,corr,466.256,61.769,True
+velocidade = 0.8,um por vez,velocidade,0.800,15.000,120.000,L1,nn,471.144,61.128,True
+velocidade = 0.8,um por vez,velocidade,0.800,15.000,120.000,L1,opt,461.994,62.339,True
+velocidade = 0.8,um por vez,velocidade,0.800,15.000,120.000,L2,ref,611.688,47.083,True
+velocidade = 0.8,um por vez,velocidade,0.800,15.000,120.000,L2,corr,430.413,66.913,True
+velocidade = 0.8,um por vez,velocidade,0.800,15.000,120.000,L2,nn,451.050,63.851,True
+velocidade = 0.8,um por vez,velocidade,0.800,15.000,120.000,L2,opt,429.881,66.995,True
+velocidade = 0.9,um por vez,velocidade,0.900,15.000,120.000,L0,ref,630.078,45.709,True
+velocidade = 0.9,um por vez,velocidade,0.900,15.000,120.000,L0,corr,459.822,62.633,True
+velocidade = 0.9,um por vez,velocidade,0.900,15.000,120.000,L0,nn,465.511,61.867,True
+velocidade = 0.9,um por vez,velocidade,0.900,15.000,120.000,L0,opt,454.683,63.341,True
+velocidade = 0.9,um por vez,velocidade,0.900,15.000,120.000,L1,ref,653.328,44.082,True
+velocidade = 0.9,um por vez,velocidade,0.900,15.000,120.000,L1,corr,445.767,64.608,True
+velocidade = 0.9,um por vez,velocidade,0.900,15.000,120.000,L1,nn,450.111,63.984,True
+velocidade = 0.9,um por vez,velocidade,0.900,15.000,120.000,L1,opt,441.978,65.162,True
+velocidade = 0.9,um por vez,velocidade,0.900,15.000,120.000,L2,ref,575.039,50.084,True
+velocidade = 0.9,um por vez,velocidade,0.900,15.000,120.000,L2,corr,413.906,69.581,True
+velocidade = 0.9,um por vez,velocidade,0.900,15.000,120.000,L2,nn,432.250,66.628,True
+velocidade = 0.9,um por vez,velocidade,0.900,15.000,120.000,L2,opt,413.433,69.661,True
+velocidade = 1.1,um por vez,velocidade,1.100,15.000,120.000,L0,ref,566.764,50.815,True
+velocidade = 1.1,um por vez,velocidade,1.100,15.000,120.000,L0,corr,427.464,67.374,True
+velocidade = 1.1,um por vez,velocidade,1.100,15.000,120.000,L0,nn,432.118,66.648,True
+velocidade = 1.1,um por vez,velocidade,1.100,15.000,120.000,L0,opt,423.259,68.043,True
+velocidade = 1.1,um por vez,velocidade,1.100,15.000,120.000,L1,ref,585.786,49.165,True
+velocidade = 1.1,um por vez,velocidade,1.100,15.000,120.000,L1,corr,415.964,69.237,True
+velocidade = 1.1,um por vez,velocidade,1.100,15.000,120.000,L1,nn,419.518,68.650,True
+velocidade = 1.1,um por vez,velocidade,1.100,15.000,120.000,L1,opt,412.864,69.757,True
+velocidade = 1.1,um por vez,velocidade,1.100,15.000,120.000,L2,ref,521.732,55.201,True
+velocidade = 1.1,um por vez,velocidade,1.100,15.000,120.000,L2,corr,389.895,73.866,True
+velocidade = 1.1,um por vez,velocidade,1.100,15.000,120.000,L2,nn,404.905,71.128,True
+velocidade = 1.1,um por vez,velocidade,1.100,15.000,120.000,L2,opt,389.509,73.939,True
+t_item = 10.0,um por vez,t_item,1.000,10.000,120.000,L0,ref,541.305,53.205,True
+t_item = 10.0,um por vez,t_item,1.000,10.000,120.000,L0,corr,388.075,74.212,True
+t_item = 10.0,um por vez,t_item,1.000,10.000,120.000,L0,nn,393.195,73.246,True
+t_item = 10.0,um por vez,t_item,1.000,10.000,120.000,L0,opt,383.450,75.108,True
+t_item = 10.0,um por vez,t_item,1.000,10.000,120.000,L1,ref,562.230,51.225,True
+t_item = 10.0,um por vez,t_item,1.000,10.000,120.000,L1,corr,375.425,76.713,True
+t_item = 10.0,um por vez,t_item,1.000,10.000,120.000,L1,nn,379.335,75.922,True
+t_item = 10.0,um por vez,t_item,1.000,10.000,120.000,L1,opt,372.015,77.416,True
+t_item = 10.0,um por vez,t_item,1.000,10.000,120.000,L2,ref,491.770,58.564,True
+t_item = 10.0,um por vez,t_item,1.000,10.000,120.000,L2,corr,346.750,83.057,True
+t_item = 10.0,um por vez,t_item,1.000,10.000,120.000,L2,nn,363.260,79.282,True
+t_item = 10.0,um por vez,t_item,1.000,10.000,120.000,L2,opt,346.325,83.159,True
+t_item = 20.0,um por vez,t_item,1.000,20.000,120.000,L0,ref,649.205,44.362,True
+t_item = 20.0,um por vez,t_item,1.000,20.000,120.000,L0,corr,495.975,58.067,True
+t_item = 20.0,um por vez,t_item,1.000,20.000,120.000,L0,nn,501.095,57.474,True
+t_item = 20.0,um por vez,t_item,1.000,20.000,120.000,L0,opt,491.350,58.614,True
+t_item = 20.0,um por vez,t_item,1.000,20.000,120.000,L1,ref,670.130,42.977,True
+t_item = 20.0,um por vez,t_item,1.000,20.000,120.000,L1,corr,483.325,59.587,True
+t_item = 20.0,um por vez,t_item,1.000,20.000,120.000,L1,nn,487.235,59.109,True
+t_item = 20.0,um por vez,t_item,1.000,20.000,120.000,L1,opt,479.915,60.011,True
+t_item = 20.0,um por vez,t_item,1.000,20.000,120.000,L2,ref,599.670,48.026,True
+t_item = 20.0,um por vez,t_item,1.000,20.000,120.000,L2,corr,454.650,63.345,True
+t_item = 20.0,um por vez,t_item,1.000,20.000,120.000,L2,nn,471.160,61.126,True
+t_item = 20.0,um por vez,t_item,1.000,20.000,120.000,L2,opt,454.225,63.405,True
+t_fixo = 60.0,um por vez,t_fixo,1.000,15.000,60.000,L0,ref,535.255,53.806,True
+t_fixo = 60.0,um por vez,t_fixo,1.000,15.000,60.000,L0,corr,382.025,75.388,True
+t_fixo = 60.0,um por vez,t_fixo,1.000,15.000,60.000,L0,nn,387.145,74.391,True
+t_fixo = 60.0,um por vez,t_fixo,1.000,15.000,60.000,L0,opt,377.400,76.312,True
+t_fixo = 60.0,um por vez,t_fixo,1.000,15.000,60.000,L1,ref,556.180,51.782,True
+t_fixo = 60.0,um por vez,t_fixo,1.000,15.000,60.000,L1,corr,369.375,77.970,True
+t_fixo = 60.0,um por vez,t_fixo,1.000,15.000,60.000,L1,nn,373.285,77.153,True
+t_fixo = 60.0,um por vez,t_fixo,1.000,15.000,60.000,L1,opt,365.965,78.696,True
+t_fixo = 60.0,um por vez,t_fixo,1.000,15.000,60.000,L2,ref,485.720,59.293,True
+t_fixo = 60.0,um por vez,t_fixo,1.000,15.000,60.000,L2,corr,340.700,84.532,True
+t_fixo = 60.0,um por vez,t_fixo,1.000,15.000,60.000,L2,nn,357.210,80.625,True
+t_fixo = 60.0,um por vez,t_fixo,1.000,15.000,60.000,L2,opt,340.275,84.637,True
+t_fixo = 180.0,um por vez,t_fixo,1.000,15.000,180.000,L0,ref,655.255,43.952,True
+t_fixo = 180.0,um por vez,t_fixo,1.000,15.000,180.000,L0,corr,502.025,57.368,True
+t_fixo = 180.0,um por vez,t_fixo,1.000,15.000,180.000,L0,nn,507.145,56.788,True
+t_fixo = 180.0,um por vez,t_fixo,1.000,15.000,180.000,L0,opt,497.400,57.901,True
+t_fixo = 180.0,um por vez,t_fixo,1.000,15.000,180.000,L1,ref,676.180,42.592,True
+t_fixo = 180.0,um por vez,t_fixo,1.000,15.000,180.000,L1,corr,489.375,58.851,True
+t_fixo = 180.0,um por vez,t_fixo,1.000,15.000,180.000,L1,nn,493.285,58.384,True
+t_fixo = 180.0,um por vez,t_fixo,1.000,15.000,180.000,L1,opt,485.965,59.264,True
+t_fixo = 180.0,um por vez,t_fixo,1.000,15.000,180.000,L2,ref,605.720,47.547,True
+t_fixo = 180.0,um por vez,t_fixo,1.000,15.000,180.000,L2,corr,460.700,62.514,True
+t_fixo = 180.0,um por vez,t_fixo,1.000,15.000,180.000,L2,nn,477.210,60.351,True
+t_fixo = 180.0,um por vez,t_fixo,1.000,15.000,180.000,L2,opt,460.275,62.571,True
+pessimista,extremo,todos,0.800,20.000,180.000,L0,ref,787.556,36.569,True
+pessimista,extremo,todos,0.800,20.000,180.000,L0,corr,596.019,48.321,True
+pessimista,extremo,todos,0.800,20.000,180.000,L0,nn,602.419,47.807,True
+pessimista,extremo,todos,0.800,20.000,180.000,L0,opt,590.237,48.794,True
+pessimista,extremo,todos,0.800,20.000,180.000,L1,ref,813.712,35.393,True
+pessimista,extremo,todos,0.800,20.000,180.000,L1,corr,580.206,49.638,True
+pessimista,extremo,todos,0.800,20.000,180.000,L1,nn,585.094,49.223,True
+pessimista,extremo,todos,0.800,20.000,180.000,L1,opt,575.944,50.005,True
+pessimista,extremo,todos,0.800,20.000,180.000,L2,ref,725.638,39.689,True
+pessimista,extremo,todos,0.800,20.000,180.000,L2,corr,544.362,52.906,True
+pessimista,extremo,todos,0.800,20.000,180.000,L2,nn,565.000,50.973,True
+pessimista,extremo,todos,0.800,20.000,180.000,L2,opt,543.831,52.958,True
+otimista,extremo,todos,1.100,10.000,60.000,L0,ref,452.814,63.602,True
+otimista,extremo,todos,1.100,10.000,60.000,L0,corr,313.514,91.862,True
+otimista,extremo,todos,1.100,10.000,60.000,L0,nn,318.168,90.518,True
+otimista,extremo,todos,1.100,10.000,60.000,L0,opt,309.309,93.111,True
+otimista,extremo,todos,1.100,10.000,60.000,L1,ref,471.836,61.038,True
+otimista,extremo,todos,1.100,10.000,60.000,L1,corr,302.014,95.360,True
+otimista,extremo,todos,1.100,10.000,60.000,L1,nn,305.568,94.251,True
+otimista,extremo,todos,1.100,10.000,60.000,L1,opt,298.914,96.349,True
+otimista,extremo,todos,1.100,10.000,60.000,L2,ref,407.782,70.626,True
+otimista,extremo,todos,1.100,10.000,60.000,L2,corr,275.945,104.368,True
+otimista,extremo,todos,1.100,10.000,60.000,L2,nn,290.955,98.985,True
+otimista,extremo,todos,1.100,10.000,60.000,L2,opt,275.559,104.515,True

@@ -230,6 +230,67 @@ def figura_ganho_faixa(tabela, base):
         return salvar(fig, base)
 
 
+def dados_sensibilidade(tabela):
+    """Pedidos por turno nos cenarios pessimista, base e otimista (tabela_sensibilidade.csv).
+
+    DataFrame indexado por (layout, estrategia), na ordem dos paineis, com as colunas pessimista, base e otimista.
+    """
+    tres = tabela[tabela["cenario"].isin(["pessimista", "base", "otimista"])]
+    larga = tres.pivot(index=["layout", "estrategia"], columns="cenario", values="pedidos_turno")
+    return larga.loc[[(l, e) for l in LAYOUTS for e in ESTRATEGIAS], ["pessimista", "base", "otimista"]]
+
+
+def _legenda_cenario(tabela, cenario, nome):
+    """Texto 'Nome: v = 1,1 m/s, 10 s por item, 60 s fixos' com os parametros do cenario."""
+    c = tabela[tabela["cenario"] == cenario].iloc[0]
+    v = f"{c['velocidade_m_s']:g}".replace(".", ",")
+    return f"{nome}: v = {v} m/s, {c['t_item_s']:g} s por item, {c['t_fixo_s']:g} s fixos"
+
+
+def figura_sensibilidade(tabela, base):
+    """Figura 4: pedidos por turno em cada caso, da condicao pessimista a otimista, um painel por layout.
+
+    A barra cinza vai do cenario pessimista ao otimista; o ponto e o caso base. Os numeros so aparecem nos dois
+    casos que a analise compara (L0 com ref e L2 com opt). Mostra duas coisas: a ORDEM dos casos nao muda, mas
+    o numero de pedidos por turno depende muito das premissas de tempo.
+    """
+    dados = dados_sensibilidade(tabela)
+    destaques = {("L0", "ref"), ("L2", "opt")}
+    topo = np.ceil(dados["otimista"].max() / 20) * 20
+    with plt.rc_context(ESTILO):
+        fig, eixos = plt.subplots(1, len(LAYOUTS), sharey=True, figsize=(7.2, 3.7))
+        for eixo, layout in zip(eixos, LAYOUTS):
+            for x, e in enumerate(ESTRATEGIAS):
+                pessimista, valor_base, otimista = dados.loc[(layout, e), ["pessimista", "base", "otimista"]]
+                eixo.plot([x, x], [pessimista, otimista], color=EIXO, linewidth=8, solid_capstyle="round", zorder=2)
+                eixo.plot([x], [valor_base], linestyle="", marker="o", markersize=7, markerfacecolor=TINTA,
+                          markeredgecolor=FUNDO, markeredgewidth=1.2, zorder=3)
+                if (layout, e) in destaques:
+                    eixo.annotate(f"{otimista:.0f}", (x, otimista), xytext=(0, 6), textcoords="offset points",
+                                  ha="center", va="bottom", fontsize=8, color=TINTA_2)
+                    eixo.annotate(f"{pessimista:.0f}", (x, pessimista), xytext=(0, -7), textcoords="offset points",
+                                  ha="center", va="top", fontsize=8, color=TINTA_2)
+            eixo.set_title(f"{layout} · {NOME_LAYOUT[layout]}")
+            eixo.set_xticks(range(len(ESTRATEGIAS)), list(ESTRATEGIAS))
+            eixo.set_xlim(-0.6, len(ESTRATEGIAS) - 0.4)
+            eixo.set_ylim(0, topo)
+            eixo.yaxis.grid(True, color=GRADE, linewidth=0.8)
+            eixo.set_axisbelow(True)
+            eixo.tick_params(axis="x", length=0)
+        eixos[0].set_ylabel("Pedidos por turno (8 h)")
+        legenda = [Line2D([], [], color=EIXO, linewidth=8, solid_capstyle="round",
+                          label="faixa: do cenário pessimista ao otimista"),
+                   Line2D([], [], linestyle="", marker="o", markersize=7, markerfacecolor=TINTA,
+                          markeredgecolor=FUNDO, label="caso base")]
+        fig.legend(handles=legenda, loc="lower center", ncol=2, bbox_to_anchor=(0.5, 0.075))
+        nota = " | ".join([_legenda_cenario(tabela, "base", "Base"),
+                           _legenda_cenario(tabela, "pessimista", "Pessimista"),
+                           _legenda_cenario(tabela, "otimista", "Otimista")])
+        fig.text(0.5, 0.005, nota, fontsize=7, color=TINTA_2, ha="center", va="bottom")
+        fig.tight_layout(rect=(0, 0.16, 1, 1))
+        return salvar(fig, base)
+
+
 # ---- execucao ---------------------------------------------------------------------------
 def ler_resultado(nome):
     caminho = PASTA_RESULTADOS / nome

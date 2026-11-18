@@ -16,9 +16,9 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 from config import LAYOUTS                                                           # noqa: E402
 from experimento import FAIXAS_SECOES                                                # noqa: E402
-from graficos import (dados_boxplot, faixas_presentes, figura_distancia,             # noqa: E402
-                      figura_ganho_faixa, figura_reducao, formatar_pct, pontos_floresta,
-                      serie_ganho_faixa)
+from graficos import (dados_boxplot, dados_sensibilidade, faixas_presentes,         # noqa: E402
+                      figura_distancia, figura_ganho_faixa, figura_reducao, figura_sensibilidade,
+                      formatar_pct, pontos_floresta, serie_ganho_faixa)
 from rotas import ESTRATEGIAS                                                        # noqa: E402
 
 BASE = [100, 150, 200, 250, 300, 350]
@@ -120,6 +120,43 @@ def test_figuras_reprodutiveis():
     with tempfile.TemporaryDirectory() as a, tempfile.TemporaryDirectory() as b:
         for c1, c2 in zip(_desenhar(a), _desenhar(b)):
             assert c1.name == c2.name and c1.read_bytes() == c2.read_bytes(), c1.name
+
+
+def sensibilidade_ficticia():
+    """tabela_sensibilidade de mentira (so as colunas que a figura usa), com as linhas em ordem trocada.
+
+    Pedidos por turno: pessimista = 40 + i, base = 60 + i, otimista = 90 + i, em que i e a posicao do caso.
+    """
+    parametros = {"base": (1.0, 15.0, 120.0), "pessimista": (0.8, 20.0, 180.0), "otimista": (1.1, 10.0, 60.0)}
+    nivel = {"pessimista": 40, "base": 60, "otimista": 90}
+    linhas = []
+    for i, (layout, e) in enumerate([(l, e) for l in LAYOUTS for e in ESTRATEGIAS]):
+        for cenario, (v, t_item, t_fixo) in parametros.items():
+            linhas.append({"cenario": cenario, "layout": layout, "estrategia": e,
+                           "pedidos_turno": nivel[cenario] + i, "velocidade_m_s": v,
+                           "t_item_s": t_item, "t_fixo_s": t_fixo})
+    return pd.DataFrame(linhas[::-1])
+
+
+def test_dados_sensibilidade_a_mao():
+    dados = dados_sensibilidade(sensibilidade_ficticia())
+    assert list(dados.columns) == ["pessimista", "base", "otimista"]
+    assert list(dados.index) == [(l, e) for l in LAYOUTS for e in ESTRATEGIAS]      # ordem dos paineis
+    assert list(dados.loc[("L0", "ref")]) == [40, 60, 90]
+    assert list(dados.loc[("L2", "opt")]) == [51, 71, 101]                           # caso numero 11 (i = 11)
+    assert (dados["pessimista"] < dados["base"]).all() and (dados["base"] < dados["otimista"]).all()
+
+
+def test_figura_sensibilidade_gera_png_e_pdf_validos_e_iguais():
+    with tempfile.TemporaryDirectory() as a, tempfile.TemporaryDirectory() as b:
+        primeiro = figura_sensibilidade(sensibilidade_ficticia(), Path(a) / "f4")
+        segundo = figura_sensibilidade(sensibilidade_ficticia(), Path(b) / "f4")
+        assert [c.suffix for c in primeiro] == [".png", ".pdf"]
+        for c1, c2 in zip(primeiro, segundo):
+            conteudo = c1.read_bytes()
+            assert len(conteudo) > 5000
+            assert conteudo.startswith(b"\x89PNG\r\n\x1a\n" if c1.suffix == ".png" else b"%PDF")
+            assert conteudo == c2.read_bytes()                                       # reprodutivel
 
 
 if __name__ == "__main__":
