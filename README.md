@@ -17,6 +17,18 @@ Dataset: Instacart Market Basket Analysis (Kaggle).
 
 ## Como executar
 
+## Visualizações dos Layouts
 
+As figuras dos layouts (L<sub>0</sub>, L<sub>1</sub> e L<sub>2</sub>) já estão pré-geradas em `dados/layouts/`. Caso deseje reproduzi-las a partir dos arquivos CSV:
+
+1. Instale as dependências:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. Reproduza o comando:
+   ```bash
+   python3 modelagem/gerar_imagens_layouts.py  
+   ```
 
 ## Papéis
