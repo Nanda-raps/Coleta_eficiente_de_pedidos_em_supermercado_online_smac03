@@ -28,22 +28,21 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 from matplotlib.collections import LineCollection
+from matplotlib.colors import Normalize
 from matplotlib.lines import Line2D
 from matplotlib.patches import Rectangle
 
-# ---------------------------------------------------------------------------
-# Parâmetros do layout (seção 3.5 da modelagem)
-# ---------------------------------------------------------------------------
-N_CORREDORES = 17
-COMPRIMENTO = 20.0   # m por corredor
-DX = 4.0             # m entre eixos de corredores adjacentes
-X_MAX = (N_CORREDORES - 1) * DX      # 64 m
-H_LATERAL = 0.0      # slots sobre o eixo do corredor (h_i = 0)
-X_ENTRADA = 0.0      # ENTRADA em (0, 0): coincide com o ponto de passagem frontal do corredor 1
-X_CAIXA = X_MAX      # CAIXA em (64, 0): coincide com o ponto de passagem frontal do corredor 17
-N_POS_MAX = 8        # espaçamento de 2,5 m; primeiro slot a 1,25 m do início
 
-# Paleta
+N_CORREDORES = 17
+COMPRIMENTO = 20.0
+DX = 4.0
+X_MAX = (N_CORREDORES - 1) * DX
+H_LATERAL = 0.0
+X_ENTRADA = 0.0
+X_CAIXA = X_MAX
+N_POS_MAX = 8
+
+
 COR_FUNDO_LOJA = "#F8FAFC"
 COR_EIXO = "#94A3B8"
 COR_TRANSVERSAL = "#334155"
@@ -56,7 +55,7 @@ COR_ARESTA_G2 = "#D97706"
 COR_NO_G2 = "#FDE68A"
 COR_NO_G2_BORDA = "#B45309"
 _ORDEM_TAB20 = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 1, 3, 5, 7, 9, 11, 13]
-COR_CORREDOR = {c: plt.cm.tab20(_ORDEM_TAB20[c - 1]) for c in range(1, 18)}   # corredores vizinhos têm cores distintas
+COR_CORREDOR = {c: plt.cm.tab20(_ORDEM_TAB20[c - 1]) for c in range(1, 18)}
 
 plt.rcParams.update(
     {
@@ -67,16 +66,12 @@ plt.rcParams.update(
 )
 
 
-# ---------------------------------------------------------------------------
-# Dados
-# ---------------------------------------------------------------------------
 @dataclass
 class Loja:
-    """Geometria da loja (em metros) e grafo físico G1."""
 
-    slots: pd.DataFrame      # colunas: idx, corredor, pos, x_eixo, y, x_slot
-    grafo: nx.Graph          # G1 completo, com pesos de Manhattan
-    rho: np.ndarray          # rho(p) = d(ENT,p) + d(p,CAIXA), por slot (ordem de slots)
+    slots: pd.DataFrame
+    grafo: nx.Graph
+    rho: np.ndarray
 
     @property
     def n_slots(self) -> int:
@@ -84,7 +79,6 @@ class Loja:
 
 
 def localizar_layout(raiz: Path, layout: str) -> Path | None:
-    """Procura dados/layouts/layout_<L>*.csv (prefere o arquivo '*_final')."""
     pasta = raiz / "dados" / "layouts"
     cands = sorted(pasta.glob(f"layout_{layout}*.csv")) if pasta.exists() else []
     cands.sort(key=lambda p_: (0 if "final" in p_.stem else 1, p_.name))
@@ -92,7 +86,6 @@ def localizar_layout(raiz: Path, layout: str) -> Path | None:
 
 
 def carregar_layout(raiz: Path, layout: str = "L0") -> pd.DataFrame:
-    """Lê o layout (colunas: aisle_id, corredor, posicao_na_frente; aisle e department opcionais)."""
     csv = localizar_layout(raiz, layout)
     if csv is not None:
         df = pd.read_csv(csv)
@@ -123,7 +116,7 @@ def construir_loja(df_layout: pd.DataFrame) -> Loja:
                         y=passo * (p - 0.5), x_slot=x + H_LATERAL))
     slots = pd.DataFrame(reg)
 
-    # Grafo físico G1: ENTRADA, CAIXA, pontos de passagem (frente/fundo) e slots sobre o eixo
+
     g = nx.Graph()
     manh = lambda a_, b_: abs(a_[0] - b_[0]) + abs(a_[1] - b_[1])
     pos = {"ENTRADA": (X_ENTRADA, 0.0), "CAIXA": (X_CAIXA, 0.0)}
@@ -134,13 +127,13 @@ def construir_loja(df_layout: pd.DataFrame) -> Loja:
     def aresta(a_, b_):
         g.add_edge(a_, b_, weight=manh(pos[a_], pos[b_]))
 
-    for c in range(1, N_CORREDORES):                       # transversais (troca de corredor)
+    for c in range(1, N_CORREDORES):
         aresta(f"VPf{c}", f"VPf{c + 1}")
         aresta(f"VPt{c}", f"VPt{c + 1}")
-    aresta("ENTRADA", "VPf1")                              # peso 0: coincidem
+    aresta("ENTRADA", "VPf1")
     aresta("CAIXA", f"VPf{N_CORREDORES}")
 
-    for c, grp in slots.groupby("corredor"):               # slots consecutivos no eixo, até as transversais
+    for c, grp in slots.groupby("corredor"):
         cadeia = [f"VPf{c}"]
         for _, s in grp.iterrows():
             k = int(s["idx"])
@@ -157,7 +150,6 @@ def construir_loja(df_layout: pd.DataFrame) -> Loja:
 
 
 def carregar_arestas_g2(raiz: Path, ids: list[int]) -> tuple[list[tuple[int, int, float]], bool]:
-    """Retorna (arestas, dados_reais) com os extremos em aisle_id. Sem arquivo -> topologia ilustrativa."""
     validos = set(ids)
     dados = raiz / "dados"
     candidatos = list(dados.rglob("*coocor*.csv")) + list(dados.rglob("*lift*.csv")) if dados.exists() else []
@@ -169,14 +161,14 @@ def carregar_arestas_g2(raiz: Path, ids: list[int]) -> tuple[list[tuple[int, int
             u = df.iloc[:, 0].astype(int).to_numpy()
             v = df.iloc[:, 1].astype(int).to_numpy()
             w = df.iloc[:, 2].astype(float).to_numpy()
-            if min(u.min(), v.min()) == 0 and 0 not in validos:   # índices 0-based -> aisle_id
+            if min(u.min(), v.min()) == 0 and 0 not in validos:
                 u, v = u + 1, v + 1
             ok = np.isin(u, list(validos)) & np.isin(v, list(validos)) & (u != v)
             arestas = list(zip(u[ok].tolist(), v[ok].tolist(), w[ok].tolist()))
             if arestas:
                 print(f"Arestas de G2 lidas de: {arq}")
                 return arestas, True
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             warnings.warn(f"Falha ao ler {arq}: {e}")
 
     warnings.warn("Arquivo de coocorrência/lift não encontrado: G2 será ILUSTRATIVO (sintético).")
@@ -184,7 +176,7 @@ def carregar_arestas_g2(raiz: Path, ids: list[int]) -> tuple[list[tuple[int, int
     ids_ord = sorted(ids)
     n = len(ids_ord)
     arestas = []
-    bloco = np.arange(n) // 12          # grupos de seções com afinidade interna
+    bloco = np.arange(n) // 12
     for i in range(n):
         for j in range(i + 1, n):
             if bloco[i] == bloco[j] and rng.random() < 0.55:
@@ -194,142 +186,141 @@ def carregar_arestas_g2(raiz: Path, ids: list[int]) -> tuple[list[tuple[int, int
     return arestas, False
 
 
-# ---------------------------------------------------------------------------
-# Desenho da camada física (planta vista de cima)
-# ---------------------------------------------------------------------------
-def desenhar_fisico(ax, loja: Loja, cores_slots=None, tamanho_slot=75, cmap=None):
-    """Planta de G1: slots sobre os eixos, pontos de passagem, ENTRADA e CAIXA. Retorna o scatter dos slots."""
-    ax.set_aspect("equal", adjustable="box")
-    ax.set_xlim(-6, X_MAX + 6)
-    ax.set_ylim(-8, COMPRIMENTO + 3.0)
-    ax.axis("off")
-    ax.add_patch(Rectangle((-2.0, -1.4), X_MAX + 4.0, COMPRIMENTO + 2.8,
-                           facecolor=COR_FUNDO_LOJA, edgecolor=COR_EIXO, lw=1.0, zorder=0))
+FIG_W = 3.35
+FS = 6.0
+FS_S = 5.5
+plt.rcParams.update({"font.size": FS, "axes.titlesize": FS + 1, "legend.fontsize": FS_S})
 
-    for y in (0.0, COMPRIMENTO):                                   # transversais
-        ax.plot([0, X_MAX], [y, y], color=COR_TRANSVERSAL, lw=2.2, solid_capstyle="round", zorder=2)
-    for c in range(1, N_CORREDORES + 1):                           # eixos
-        x = (c - 1) * DX
-        ax.plot([x, x], [0, COMPRIMENTO], color=COR_EIXO, lw=1.6, zorder=2)
-        ax.text(x, -2.4, f"C{c}", ha="center", va="center", fontsize=9, fontweight="bold", color=COR_VP)
 
-    xs = np.repeat(np.arange(N_CORREDORES) * DX, 2)                # 34 pontos de passagem
-    ys = np.tile([0.0, COMPRIMENTO], N_CORREDORES)
-    ax.scatter(xs, ys, marker="D", s=44, c=COR_VP, edgecolors="white", linewidths=0.8, zorder=5)
+def fmt(v: float) -> str:
+    return f"{v:.1f}".replace(".", ",")
 
-    s = loja.slots
-    kw = dict(s=tamanho_slot, marker="s", linewidths=0.8, zorder=6)
-    if cores_slots is None:
-        sc = ax.scatter(s.x_slot, s.y, c=COR_SLOT, edgecolors=COR_SLOT_BORDA, **kw)
-    else:
-        sc = ax.scatter(s.x_slot, s.y, c=cores_slots, cmap=cmap, edgecolors="#0F172A", **kw)
 
-    for x, cor, face, nome in ((X_ENTRADA, COR_ENTRADA, "#DCFCE7", "ENTRADA ($v_{in}$)"),
-                               (X_CAIXA, COR_CAIXA, "#FEE2E2", "CAIXA ($v_{out}$)")):
-        ax.scatter([x], [0], s=300, marker="s", facecolor=face, edgecolor=cor, lw=2.0, zorder=7)
-        ax.scatter([x], [0], s=44, marker="D", c=COR_VP, edgecolors="white", linewidths=0.8, zorder=8)
-        ax.text(x, -5.2, nome, ha="center", va="top", fontsize=9.5, fontweight="bold", color=cor)
-    return sc
+def pts_por_unidade(fig, ax):
+    ax.apply_aspect()
+    caixa = ax.get_window_extent()
+    xl, yl = ax.get_xlim(), ax.get_ylim()
+    return min(caixa.width / (xl[1] - xl[0]), caixa.height / (yl[1] - yl[0])) * 72.0 / fig.dpi
+
+
+def area(ppu: float, lado: float, losango: bool = False) -> float:
+    s_ = (lado * ppu) ** 2
+    return s_ / 2.0 if losango else s_
 
 
 def salvar(fig, saida: Path):
     saida.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(saida, dpi=300, bbox_inches="tight", pad_inches=0.25, facecolor="white")
+    fig.savefig(saida, dpi=600, bbox_inches="tight", pad_inches=0.02, facecolor="white")
     plt.close(fig)
     print(f"Salvo: {saida}")
 
 
-# ---------------------------------------------------------------------------
-# Cenário 2: grafo único
-# ---------------------------------------------------------------------------
 def gerar_cenario2(raiz: Path, saida: Path, com_titulo: bool = False, layout: str = "L2") -> None:
     loja = construir_loja(carregar_layout(raiz, layout))
-    fig, ax = plt.subplots(figsize=(16, 6.8))
+    s = loja.slots
+    fig, ax = plt.subplots(figsize=(FIG_W, 1.55))
+    ax.set_aspect("equal", adjustable="box")
+    ax.set_xlim(-3, X_MAX + 3)
+    ax.set_ylim(-7, COMPRIMENTO + 2.0)
+    ax.axis("off")
+    ax.add_patch(Rectangle((-2.0, -1.4), X_MAX + 4.0, COMPRIMENTO + 2.8, fc=COR_FUNDO_LOJA, ec=COR_EIXO,
+                           lw=0.5, zorder=0))
+    for y in (0.0, COMPRIMENTO):
+        ax.plot([0, X_MAX], [y, y], color=COR_TRANSVERSAL, lw=1.0, zorder=2)
+    for c in range(1, N_CORREDORES + 1):
+        x = (c - 1) * DX
+        ax.plot([x, x], [0, COMPRIMENTO], color=COR_EIXO, lw=0.7, zorder=2)
+        ax.text(x, -2.8, f"{c}", ha="center", va="center", fontsize=FS_S, fontweight="bold", color=COR_VP)
+    norm = Normalize(vmin=loja.rho.min(), vmax=loja.rho.max())
+    sm = plt.cm.ScalarMappable(norm=norm, cmap="viridis_r")
+    cb = fig.colorbar(sm, ax=ax, fraction=0.025, pad=0.06, aspect=18)
+    cb.set_ticks([loja.rho.min(), loja.rho.max()])
+    cb.set_ticklabels([fmt(loja.rho.min()), fmt(loja.rho.max())])
+    cb.ax.tick_params(labelsize=FS_S, length=1.5, width=0.4, pad=1)
+    cb.outline.set_linewidth(0.4)
+    cb.set_label(r"$\rho(p)$ [m]", fontsize=FS)
+    cb.ax.yaxis.set_label_coords(3.2, 0.5)
 
-    sc = desenhar_fisico(ax, loja, cores_slots=loja.rho, cmap="viridis_r", tamanho_slot=80)
-    cb = fig.colorbar(sc, ax=ax, fraction=0.018, pad=0.01)
-    cb.set_label(r"Custo do slot  $\rho(p) = d(v_{in},p) + d(p,v_{out})$  [m]", fontsize=10.5)
-    cb.ax.text(0.5, 1.03, "mais caro\n(fundo)", transform=cb.ax.transAxes, ha="center", va="bottom", fontsize=9)
-    cb.ax.text(0.5, -0.03, "mais barato\n(frente)", transform=cb.ax.transAxes, ha="center", va="top", fontsize=9)
-    ax.text(-5.8, COMPRIMENTO + 1.2, "FUNDO", fontsize=9, color="#64748B", fontweight="bold", ha="left")
-    ax.text(-5.8, 1.2, "FRENTE", fontsize=9, color="#64748B", fontweight="bold", ha="left")
+    ppu = pts_por_unidade(fig, ax)
+    xs = np.repeat(np.arange(N_CORREDORES) * DX, 2)
+    ys = np.tile([0.0, COMPRIMENTO], N_CORREDORES)
+    ax.scatter(xs, ys, marker="D", s=area(ppu, 1.0, True), c=COR_VP, edgecolors="none", zorder=5)
+    ax.scatter(s.x_slot, s.y, s=area(ppu, 0.85), marker="s", c=loja.rho, cmap="viridis_r", norm=norm,
+               edgecolors="#0F172A", linewidths=0.2, zorder=6)
+    for x, cor, face, nome in ((X_ENTRADA, COR_ENTRADA, "#DCFCE7", "ENTRADA"), (X_CAIXA, COR_CAIXA, "#FEE2E2", "CAIXA")):
+        ax.scatter([x], [0], s=area(ppu, 1.5), marker="s", facecolor=face, edgecolor=cor, lw=0.7, zorder=7)
+        ax.scatter([x], [0], s=area(ppu, 1.0, True), marker="D", c=COR_VP, edgecolors="none", zorder=8)
+        ax.text(x, -5.0, nome, ha="center", va="top", fontsize=FS_S, fontweight="bold", color=cor)
 
     if com_titulo:
-        ax.set_title(
-            rf"Cenário 2: grafo único $G=(V,E,w)$ — {N_CORREDORES} corredores e {loja.n_slots} slots",
-            fontsize=14, pad=10)
+        ax.set_title(rf"Cenário 2: grafo único $G=(V,E,w)$", fontsize=FS + 1, fontweight="bold", pad=3)
     ax.legend(handles=[
-        Line2D([], [], marker="D", ls="None", color=COR_VP, markeredgecolor="white", markersize=8,
-               label="Pontos de passagem $VP$"),
-        Line2D([], [], color=COR_TRANSVERSAL, lw=2.2, label="Circulação: eixos e transversais (peso Manhattan)"),
-        Line2D([], [], marker="s", ls="None", markerfacecolor="#FDE725", markeredgecolor="#0F172A", markersize=8,
-               label=r"Slot $VS$: amarelo = menor $\rho$ (recebe as seções de maior demanda $f(s)$)"),
-    ], loc="upper center", bbox_to_anchor=(0.5, -0.01), ncol=2, fontsize=9.5, frameon=True, edgecolor="#CBD5E1")
+        Line2D([], [], marker="D", ls="None", color=COR_VP, markersize=1.0 * ppu / 1.414, label="ponto de passagem"),
+        Line2D([], [], marker="s", ls="None", markerfacecolor="#2A788E", markeredgecolor="#0F172A", markersize=0.85 * ppu,
+               markeredgewidth=0.2, label=r"slot (cor $=\rho$)"),
+        Line2D([], [], ls="None", label="nº = corredor"),
+    ], loc="upper center", bbox_to_anchor=(0.5, 0.02), ncol=3, fontsize=FS_S, frameon=False,
+        handletextpad=0.3, columnspacing=1.2)
     salvar(fig, saida)
 
 
-# ---------------------------------------------------------------------------
-# Cenário 1: multicamadas M = ({G1, G2}, C)
-# ---------------------------------------------------------------------------
 def gerar_cenario1(raiz: Path, saida: Path, max_arestas: int = 0, com_titulo: bool = False,
                    layout: str = "L1") -> None:
     loja = construir_loja(carregar_layout(raiz, layout))
     n = loja.n_slots
     ids = loja.slots["aisle_id"].tolist()
     arestas, real = carregar_arestas_g2(raiz, ids)
-    slot_de = {a_: i for i, a_ in enumerate(ids)}          # aisle_id -> índice do slot que a seção ocupa
+    slot_de = {a_: i for i, a_ in enumerate(ids)}
     arestas = [(slot_de[u], slot_de[v], w_) for u, v, w_ in arestas]
 
     def proj(x, y, z=0.0):
         return x + 0.7 * y, 0.6 * y + z
 
-    Z_SUP = 21.0
+    Z_SUP = 20.0
     s = loja.slots
     xs, ys = s["x_slot"].to_numpy(), s["y"].to_numpy()
+    cores_slot = [COR_CORREDOR[int(c)] for c in s["corredor"]]
 
-    corr = s["corredor"].to_numpy()
-    cores_slot = [COR_CORREDOR[int(c)] for c in corr]
-
-    fig, ax = plt.subplots(figsize=(16, 10.5))
-    ax.set_aspect("equal")
+    fig, ax = plt.subplots(figsize=(FIG_W, 1.6))
+    fig.subplots_adjust(left=0.0, right=1.0, top=1.0, bottom=0.0)
+    ax.set_xlim(-17, 86)
+    ax.set_ylim(-8, proj(0, COMPRIMENTO + 2.5, Z_SUP)[1] + 1)
+    ax.set_aspect("equal", adjustable="box")
     ax.axis("off")
+    ppu = pts_por_unidade(fig, ax)
 
     def plano(z, face, edge):
         pts = [proj(-2.5, -2.5, z), proj(X_MAX + 2.5, -2.5, z), proj(X_MAX + 2.5, COMPRIMENTO + 2.5, z),
                proj(-2.5, COMPRIMENTO + 2.5, z)]
-        ax.add_patch(plt.Polygon(pts, closed=True, fc=face, ec=edge, lw=1.6, alpha=0.75, zorder=1 + z / 100))
+        ax.add_patch(plt.Polygon(pts, closed=True, fc=face, ec=edge, lw=0.6, alpha=0.75, zorder=1 + z / 100))
 
-    # ---------------- G1 (embaixo): slots, pontos de passagem, ENTRADA e CAIXA
+
     plano(0, "#DBEAFE", "#3B82F6")
     for y in (0.0, COMPRIMENTO):
         a_, b_ = proj(0, y), proj(X_MAX, y)
-        ax.plot([a_[0], b_[0]], [a_[1], b_[1]], color=COR_TRANSVERSAL, lw=2.0, zorder=2)
+        ax.plot([a_[0], b_[0]], [a_[1], b_[1]], color=COR_TRANSVERSAL, lw=0.9, zorder=2)
     for c in range(N_CORREDORES):
         a_, b_ = proj(c * DX, 0), proj(c * DX, COMPRIMENTO)
-        ax.plot([a_[0], b_[0]], [a_[1], b_[1]], color=COR_CORREDOR[c + 1], lw=2.2, alpha=0.8, zorder=2)
-        lx, ly = proj(c * DX, -4.0)
-        ax.text(lx + 2.8, ly, f"C{c + 1}", ha="center", va="center", fontsize=8.5, fontweight="bold",
-                color=COR_VP, bbox=dict(boxstyle="round,pad=0.25", fc=COR_CORREDOR[c + 1], ec="none", alpha=0.85))
+        ax.plot([a_[0], b_[0]], [a_[1], b_[1]], color=COR_CORREDOR[c + 1], lw=0.9, alpha=0.85, zorder=2)
     vp = np.array([proj(c * DX, y) for c in range(N_CORREDORES) for y in (0.0, COMPRIMENTO)])
-    ax.scatter(vp[:, 0], vp[:, 1], marker="D", s=34, c=COR_VP, edgecolors="white", linewidths=0.6, zorder=5)
+    ax.scatter(vp[:, 0], vp[:, 1], marker="D", s=area(ppu, 0.72, True), c=COR_VP, edgecolors="none", zorder=5)
     sl1 = np.array([proj(x, y) for x, y in zip(xs, ys)])
-    ax.scatter(sl1[:, 0], sl1[:, 1], s=40, marker="s", c=cores_slot, edgecolors="black", linewidths=0.7, zorder=6)
-    for xe, cor, face, nome, ha_, dx_ in ((X_ENTRADA, COR_ENTRADA, "#DCFCE7", "ENTRADA", "right", -1.8),
-                                          (X_CAIXA, COR_CAIXA, "#FEE2E2", "CAIXA", "left", 1.8)):
+    ax.scatter(sl1[:, 0], sl1[:, 1], s=area(ppu, 0.75), marker="s", c=cores_slot, edgecolors="black", linewidths=0.15,
+               zorder=6)
+    for xe, cor, face, nome, ha_, dx_ in ((X_ENTRADA, COR_ENTRADA, "#DCFCE7", "ENTRADA", "center", 0.0),
+                                          (X_CAIXA, COR_CAIXA, "#FEE2E2", "CAIXA", "center", 0.0)):
         a_ = proj(xe, 0)
-        ax.scatter(*a_, s=230, marker="s", facecolor=face, edgecolor=cor, lw=1.8, zorder=7)
-        ax.scatter(*a_, s=34, marker="D", c=COR_VP, edgecolors="white", linewidths=0.6, zorder=8)
-        ax.text(a_[0] + dx_, a_[1], nome, ha=ha_, va="center", fontsize=9, fontweight="bold", color=cor)
+        ax.scatter(*a_, s=area(ppu, 1.0), marker="s", facecolor=face, edgecolor=cor, lw=0.7, zorder=7)
+        ax.scatter(*a_, s=area(ppu, 0.72, True), marker="D", c=COR_VP, edgecolors="none", zorder=8)
+        ax.text(a_[0] + dx_, a_[1] - 2.2, nome, ha=ha_, va="top", fontsize=FS_S, fontweight="bold", color=cor)
 
-    # ---------------- G2 (em cima): seção i sobre o slot que ocupa (aresta intercamada κ)
+
     plano(Z_SUP, "#FEF3C7", "#F59E0B")
     sl2 = np.array([proj(x, y, Z_SUP) for x, y in zip(xs, ys)])
-
     for i in range(n):
-        ax.plot([sl1[i, 0], sl2[i, 0]], [sl1[i, 1], sl2[i, 1]], color=cores_slot[i], lw=0.9, ls=(0, (3, 2)),
-                alpha=0.75, zorder=3)
+        ax.plot([sl1[i, 0], sl2[i, 0]], [sl1[i, 1], sl2[i, 1]], color=cores_slot[i], lw=0.4, ls=(0, (2, 1.5)),
+                alpha=0.8, zorder=3)
 
-    # E2 completo (sem pares duplicados); max_arestas > 0 limita às de maior Lift
     unicas = {}
     for u, v, w_ in arestas:
         k = (min(u, v), max(u, v))
@@ -339,42 +330,37 @@ def gerar_cenario1(raiz: Path, saida: Path, max_arestas: int = 0, com_titulo: bo
         ar = ar[-max_arestas:]
     w = np.array([t_[2] for t_ in ar])
     wn = (w - w.min()) / max(np.ptp(w), 1e-9)
-    a_min = float(np.clip(250 / len(ar), 0.05, 0.35))
-    lw_min = 0.5 if len(ar) <= 1500 else 0.25
+    a_min = float(np.clip(150 / len(ar), 0.04, 0.35))
     segs = [[tuple(sl2[u]), tuple(sl2[v])] for u, v, _ in ar]
     cores = plt.cm.YlOrBr(0.55 + 0.4 * wn)
     cores[:, 3] = a_min + (min(0.9, a_min * 2.5) - a_min) * wn
-    ax.add_collection(LineCollection(segs, colors=cores, linewidths=lw_min + 1.4 * wn, zorder=8))
+    ax.add_collection(LineCollection(segs, colors=cores, linewidths=0.15 + 0.6 * wn, zorder=8))
     print(f"G2: {n} vértices, {len(ar)} arestas desenhadas (E2 total: {len(unicas)})")
-    ax.scatter(sl2[:, 0], sl2[:, 1], s=42, c=cores_slot, edgecolors="black", linewidths=0.7, zorder=9)
+    ax.scatter(sl2[:, 0], sl2[:, 1], s=area(ppu, 0.9), c=cores_slot, edgecolors="black", linewidths=0.15, zorder=9)
 
-    nota = "\n(ilustrativo)" if not real else ""
-    ax.text(-18.5, proj(0, 10, Z_SUP)[1], "Camada lógica\n" r"$G_2$" + nota,
-            fontsize=13, fontweight="bold", color="#78350F", va="center", ha="left", linespacing=1.4)
-    ax.text(-18.5, proj(0, 10)[1], "Camada física\n" r"$G_1$",
-            fontsize=13, fontweight="bold", color="#1E3A8A", va="center", ha="left", linespacing=1.4)
+    if not real:
+        warnings.warn("ATENÇÃO: E2 sintético (ilustrativo). Não use esta figura no artigo; coloque o CSV de lift em dados/.")
+    ax.text(-16, proj(0, 10, Z_SUP)[1], "Camada\nlógica " r"$G_2$", fontsize=FS + 0.5, fontweight="bold",
+            color="#78350F", va="center", ha="left", linespacing=1.2)
+    ax.text(-16, proj(0, 10)[1], "Camada\nfísica " r"$G_1$", fontsize=FS + 0.5, fontweight="bold",
+            color="#1E3A8A", va="center", ha="left", linespacing=1.2)
 
-    ax.set_xlim(-19, 88)
-    ax.set_ylim(-5, proj(0, COMPRIMENTO + 2.5, Z_SUP)[1] + 3)
     if com_titulo:
-        ax.set_title(rf"Cenário 1: grafo multicamadas $M=(G,C)$ — {n} slots e {n} seções",
-                     fontsize=15, fontweight="bold", pad=10)
+        ax.set_title(r"Cenário 1: grafo multicamadas $M=(G,C)$", fontsize=FS + 1, fontweight="bold", pad=2)
     ax.legend(handles=[
-        Line2D([], [], marker="o", ls="None", markerfacecolor="#CBD5E1", markeredgecolor="black", markersize=8,
-               label=r"Seção $s_i \in V_2$ (cor = corredor do slot que ocupa)"),
-        Line2D([], [], color=COR_ARESTA_G2, lw=2, label=r"Afinidade $E_2$ (espessura = Lift)"),
-        Line2D([], [], color="#64748B", lw=1.4, ls=(0, (3, 2)), label=r"Alocação $\kappa$ (seção $\to$ slot, cor = corredor)"),
-        Line2D([], [], marker="s", ls="None", markerfacecolor="#CBD5E1", markeredgecolor="black", markersize=8,
-               label=r"Slot $p \in VS$ (cor = corredor)"),
-        Line2D([], [], marker="D", ls="None", color=COR_VP, markeredgecolor="white", markersize=7,
-               label=r"Ponto de passagem $VP$"),
-    ], loc="upper center", bbox_to_anchor=(0.5, 0.0), ncol=3, fontsize=10, frameon=True, edgecolor="#CBD5E1")
+        Line2D([], [], marker="o", ls="None", markerfacecolor="#CBD5E1", markeredgecolor="black", markersize=0.9 * ppu,
+               markeredgewidth=0.15, label="seção (cor = corredor)"),
+        Line2D([], [], color=COR_ARESTA_G2, lw=1.0, label=r"afinidade $E_2$ (lift)"),
+        Line2D([], [], marker="s", ls="None", markerfacecolor="#CBD5E1", markeredgecolor="black", markersize=0.75 * ppu,
+               markeredgewidth=0.15, label="slot"),
+        Line2D([], [], color="#64748B", lw=0.8, ls=(0, (2, 1.5)), label=r"alocação $\kappa$"),
+    ], loc="upper center", bbox_to_anchor=(0.5, 0.02), ncol=4, fontsize=FS_S, frameon=False,
+        handlelength=1.3, handletextpad=0.3, columnspacing=0.9)
     salvar(fig, saida)
 
 
-# ---------------------------------------------------------------------------
 def main() -> None:
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = argparse.ArgumentParser()
     ap.add_argument("--raiz", type=Path, default=Path(__file__).resolve().parent.parent)
     ap.add_argument("--cenario", choices=["1", "2", "ambos"], default="ambos")
     ap.add_argument("--max-arestas", type=int, default=0,
